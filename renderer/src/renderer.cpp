@@ -1,40 +1,59 @@
 #include "renderer.hpp"
-#include <GLFW/glfw3.h>
+#include "spdlog/spdlog.h"
 
 using namespace renderer;
 
-int Renderer::glfwExampleCode()
-{
-  GLFWwindow* window;
+Renderer::Renderer(const int width, const int height) noexcept
+    : width{width}, height{height} {
+  initializeGlfw();
+  createWindow();
+  initializeGlad();
+  printVersions();
+}
 
-  /* Initialize the library */
-  if (!glfwInit())
-    return -1;
-
-  /* Create a windowed mode window and its OpenGL context */
-  window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-  if (!window)
-  {
-    glfwTerminate();
-    return -1;
+void renderer::Renderer::initializeGlfw() const {
+  if (glfwInit() == GLFW_FALSE) {
+    spdlog::error("Can't initialize GLFW");
+    std::exit(EXIT_FAILURE);
   }
+}
 
-  /* Make the window's context current */
+void renderer::Renderer::createWindow() {
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+  window = glfwCreateWindow(width, height, "odo", nullptr, nullptr);
+  if (!window) {
+    glfwTerminate();
+    spdlog::error("Can't create GLFW window");
+    std::exit(EXIT_FAILURE);
+  }
+}
+
+void renderer::Renderer::initializeGlad() const {
   glfwMakeContextCurrent(window);
+  glfwSwapInterval(1);
 
-  /* Loop until the user closes the window */
-  while (!glfwWindowShouldClose(window))
-  {
-    /* Render here */
+  if (gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) == 0) {
+    spdlog::error("Can't initialize glad");
+    std::exit(EXIT_FAILURE);
+  }
+}
+
+void renderer::Renderer::printVersions() const {
+  spdlog::info("Versions:");
+  spdlog::info(" > OpenGL: {0}", glGetString(GL_VERSION));
+  spdlog::info(" > Renderer: {0}", glGetString(GL_RENDERER));
+  spdlog::info(" > GLFW: {0}.{1}", GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR);
+}
+
+int Renderer::run() {
+  while (!glfwWindowShouldClose(window)) {
     glClear(GL_COLOR_BUFFER_BIT);
-
-    /* Swap front and back buffers */
     glfwSwapBuffers(window);
-
-    /* Poll for and process events */
     glfwPollEvents();
   }
   glfwTerminate();
   return 0;
 }
-
