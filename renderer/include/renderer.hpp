@@ -59,6 +59,7 @@ private:
   /** Heigth of the display */
   int height;
 };
+
 } // namespace renderer
 
 #endif // RENDERER_H

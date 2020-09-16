@@ -1,5 +1,6 @@
 #include "renderer.hpp"
 #include "spdlog/spdlog.h"
+#include "triangle.hpp"
 
 using namespace renderer;
 
@@ -49,11 +50,15 @@ void renderer::Renderer::printVersions() const {
 }
 
 int Renderer::run() {
+  mesh::Triangle triangle;
   while (!glfwWindowShouldClose(window)) {
+    glViewport(0, 0, width, height);
     glClear(GL_COLOR_BUFFER_BIT);
+    triangle.render();
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
   glfwTerminate();
   return 0;
 }
+
