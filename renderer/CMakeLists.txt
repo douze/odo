@@ -10,8 +10,12 @@ target_sources(renderer
 	PRIVATE 
       "src/renderer.cpp"
       "src/triangle.cpp"
+      "src/material.cpp"
+      "src/vertexcolormaterial.cpp"
       "include/renderer.hpp"
-      "include/triangle.hpp")
+      "include/triangle.hpp"
+      "include/material.hpp"
+      "include/vertexcolormaterial.hpp")
 target_include_directories(renderer
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries(renderer ${CONAN_LIBS})

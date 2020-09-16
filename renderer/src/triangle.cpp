@@ -1,24 +1,12 @@
 #include "triangle.hpp"
+#include "vertexcolormaterial.hpp"
 
 using namespace renderer::mesh;
 
 Triangle::Triangle() noexcept {
-  // shader part
-
-  GLuint vertexShader =
-      glCreateShaderProgramv(GL_VERTEX_SHADER, 1, &vertexShaderText);
-  GLuint fragmentShader =
-      glCreateShaderProgramv(GL_FRAGMENT_SHADER, 1, &fragmentShaderText);
-
-  glCreateProgramPipelines(1, &program);
-  glUseProgramStages(program, GL_VERTEX_SHADER_BIT, vertexShader);
-  glUseProgramStages(program, GL_FRAGMENT_SHADER_BIT, fragmentShader);
-
-  // buffer part
-
   const vertex_t vertices[3] = {{-0.6f, -0.4f, 0.f, 1.f, 0.f, 0.f},
-                          {0.6f, -0.4f, 0.f, 0.f, 1.f, 0.f},
-                          {0.f, 0.6f, 0.f, 0.f, 0.f, 1.f}};
+                                {0.6f, -0.4f, 0.f, 0.f, 1.f, 0.f},
+                                {0.f, 0.6f, 0.f, 0.f, 0.f, 1.f}};
 
   GLuint vbo;
   glCreateBuffers(1, &vbo);
@@ -38,7 +26,7 @@ Triangle::Triangle() noexcept {
 }
 
 void Triangle::render() const {
-  glBindProgramPipeline(program);
+  material.use();
   glBindVertexArray(vao);
   glDrawArrays(GL_TRIANGLES, 0, 3);
 }
