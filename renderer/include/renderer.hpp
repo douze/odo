@@ -50,6 +50,11 @@ private:
    * @brief Print various information about versions.
    */
   void printVersions() const;
+  
+  /**
+   * @brief Enable OpenGL debug output.
+   */
+  void enableDebugOutput() const;
 
   /**
    * @brief Render a scene node.
