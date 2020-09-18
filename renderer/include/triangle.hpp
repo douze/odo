@@ -2,6 +2,7 @@
 #define TRIANGLE_H
 
 #include "vertexcolormaterial.hpp"
+#include "mesh.hpp"
 #include <glad/glad.h>
 
 namespace renderer {
@@ -16,7 +17,7 @@ struct vertex_t {
  * @brief Triangle mesh.
  * @note Test class, will dissapear in a near future.
  */
-class Triangle {
+class Triangle : public Mesh {
 public:
   explicit Triangle() noexcept;
 

@@ -1,4 +1,5 @@
 #include "renderer.hpp"
+#include "mesh.hpp"
 #include "spdlog/spdlog.h"
 #include "triangle.hpp"
 
@@ -50,11 +51,10 @@ void renderer::Renderer::printVersions() const {
 }
 
 int Renderer::run() {
-  mesh::Triangle triangle;
   while (!glfwWindowShouldClose(window)) {
     glViewport(0, 0, width, height);
     glClear(GL_COLOR_BUFFER_BIT);
-    triangle.render();
+    renderNode(*scene.getRoot());
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
@@ -62,3 +62,10 @@ int Renderer::run() {
   return 0;
 }
 
+
+void Renderer::renderNode(scene::Node& node) const {
+  if (node.getMesh() != nullptr) node.getMesh()->render();
+  for (const scene::Node& child : node.getChildren()) {
+    child.getMesh()->render();
+  }
+}

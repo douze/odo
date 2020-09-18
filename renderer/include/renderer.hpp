@@ -5,6 +5,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 // clang-format on
+#include "scene.hpp"
 
 namespace renderer {
 
@@ -24,6 +25,7 @@ public:
    * @brief Run the main loop.
    */
   int run();
+    scene::Scene scene;
 
 private:
   /**
@@ -49,6 +51,13 @@ private:
    */
   void printVersions() const;
 
+  /**
+   * @brief Render a scene node.
+   * @param node to render
+   * @note node may have children
+   */
+  void renderNode(scene::Node& node) const;
+
 private:
   /** Handler for current window */
   GLFWwindow* window;
@@ -58,6 +67,7 @@ private:
 
   /** Heigth of the display */
   int height;
+  
 };
 
 } // namespace renderer
