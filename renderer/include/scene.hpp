@@ -1,7 +1,9 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "material.hpp"
 #include "mesh.hpp"
+#include "transformation.hpp"
 #include <memory>
 #include <vector>
 
@@ -16,16 +18,18 @@ class Node {
 public:
   /**
    * @brief Create a node without mesh.
+   * @param transformation for the root node
    * @note Used for scene root node.
-   * @note Will be used for transform only node.
    */
-  Node();
+  explicit Node(mesh::Transformation transformation) noexcept;
 
   /**
    * @brief Create a node with a mesh.
    * @param mesh to attach to the node
    */
-  Node(std::shared_ptr<mesh::Mesh> mesh);
+  explicit Node(const std::shared_ptr<mesh::Mesh>& mesh,
+                mesh::Transformation transformation,
+                const std::shared_ptr<material::Material>& material) noexcept;
 
   /**
    * @brief Add a node child to the current node.
@@ -45,9 +49,30 @@ public:
     return children;
   }
 
+  /**
+   * @brief Return the node's transformation.
+   */
+  mesh::Transformation getTransformation() const {
+    return transformation;
+  }
+  
+  glm::mat4 getTransMat() {
+   return transformation.getMatrix(); 
+  }
+
+  /**
+   * @brief Return the node's material.
+   */
+  const std::shared_ptr<material::Material>& getMaterial() const { return material; }
+
 private:
   /** Mesh attached to the node. Can be null for transform only node. */
   std::shared_ptr<mesh::Mesh> mesh;
+
+  /** Transformation attached to the node */
+  mesh::Transformation transformation;
+
+  std::shared_ptr<material::Material> material;
 
   /** Children of the node. Used for scene graph.  */
   std::vector<std::reference_wrapper<Node>> children;
@@ -61,8 +86,8 @@ public:
   /**
    * @brief Create an empty scene.
    */
-  Scene();
-  
+  explicit Scene() noexcept;
+
   /**
    * @brief Return the scene's root by const reference.
    */

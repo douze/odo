@@ -1,6 +1,7 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
+#include "transformation.hpp"
 #include <glad/glad.h>
 #include <string>
 
@@ -18,11 +19,16 @@ public:
    */
   explicit Material(const std::string& vsPath,
                     const std::string& fsPath) noexcept;
-
   /**
    * @brief Use this material for the next rendering.
    */
   void use() const;
+
+  /**
+   * @brief Apply the transformation to the material
+   * @param transformation to apply
+   */
+  void setTransformation(mesh::Transformation transformation) const;
 
 private:
   /**
@@ -32,11 +38,11 @@ private:
   static std::string readShaderFile(const std::string& path);
 
   /**
-   * @brief Create a shader.
+   * @brief Create a shader program.
    * @param type of shader
    * @param path of the shader file
    * */
-  GLuint createShader(GLenum type, const std::string& path);
+  GLuint createShaderProgram(GLenum type, const std::string& path);
 
   /**
    * @brief Shaders location.
@@ -46,6 +52,12 @@ private:
 private:
   /** Program pipeline */
   GLuint pipeline;
+  
+  /** Vertex shader program */
+  GLuint vs;
+  
+  /** Fragment shader program */
+  GLuint fs;
 };
 
 } // namespace material

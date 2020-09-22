@@ -14,12 +14,14 @@ target_sources(renderer
       "src/vertexcolormaterial.cpp"
       "src/scene.cpp"
       "src/mesh.cpp"
+      "src/transformation.cpp"
       "include/renderer.hpp"
       "include/triangle.hpp"
       "include/material.hpp"
       "include/vertexcolormaterial.hpp"
       "include/scene.hpp"
-      "include/mesh.hpp")
+      "include/mesh.hpp"
+      "include/transformation.hpp")
 target_include_directories(renderer
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries(renderer ${CONAN_LIBS})

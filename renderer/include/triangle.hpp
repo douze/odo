@@ -1,7 +1,6 @@
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
 
-#include "vertexcolormaterial.hpp"
 #include "mesh.hpp"
 #include <glad/glad.h>
 
@@ -26,7 +25,6 @@ public:
 private:
   GLuint vao;
   GLuint program;
-  material::VertexColorMaterial material;
 };
 
 } // namespace mesh

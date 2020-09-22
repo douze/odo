@@ -25,7 +25,8 @@ public:
    * @brief Run the main loop.
    */
   int run();
-    scene::Scene scene;
+
+  scene::Scene scene;
 
 private:
   /**
@@ -50,7 +51,7 @@ private:
    * @brief Print various information about versions.
    */
   void printVersions() const;
-  
+
   /**
    * @brief Enable OpenGL debug output.
    */
@@ -72,7 +73,6 @@ private:
 
   /** Heigth of the display */
   int height;
-  
 };
 
 } // namespace renderer

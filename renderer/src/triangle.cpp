@@ -26,7 +26,6 @@ Triangle::Triangle() noexcept {
 }
 
 void Triangle::render() const {
-  material.use();
   glBindVertexArray(vao);
   glDrawArrays(GL_TRIANGLES, 0, 3);
 }
