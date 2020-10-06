@@ -138,7 +138,7 @@ int Renderer::run() {
   while (!glfwWindowShouldClose(window)) {
     glViewport(0, 0, width, height);
     glClear(GL_COLOR_BUFFER_BIT);
-    renderNode(*scene.getRoot());
+    renderNode(scene.getRoot());
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
@@ -149,13 +149,15 @@ int Renderer::run() {
 void Renderer::renderNode(scene::Node& node) const {
   if (node.getMesh() != nullptr) {
     node.getMaterial()->use();
-    node.getMaterial()->setTransformation(node.getTransformation());
+    node.getMaterial()->setTransformationMatrix(node.getTransformation());
+    node.getMaterial()->setCameraMatrices(scene.getCamera());
     node.getMesh()->render();
   }
 
   for (const scene::Node& child : node.getChildren()) {
     child.getMaterial()->use();
-    child.getMaterial()->setTransformation(child.getTransformation());
+    child.getMaterial()->setTransformationMatrix(child.getTransformation());
+    child.getMaterial()->setCameraMatrices(scene.getCamera());
     child.getMesh()->render();
   }
 }

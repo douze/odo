@@ -1,11 +1,19 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
-#include "transformation.hpp"
 #include <glad/glad.h>
 #include <string>
 
 namespace renderer {
+
+namespace mesh {
+class Transformation;
+}
+
+namespace scene {
+class Camera;
+}
+
 namespace material {
 
 /**
@@ -28,7 +36,9 @@ public:
    * @brief Apply the transformation to the material
    * @param transformation to apply
    */
-  void setTransformation(mesh::Transformation transformation) const;
+  void setTransformationMatrix(mesh::Transformation transformation) const;
+
+  void setCameraMatrices(scene::Camera camera) const;
 
 private:
   /**
@@ -52,10 +62,10 @@ private:
 private:
   /** Program pipeline */
   GLuint pipeline;
-  
+
   /** Vertex shader program */
   GLuint vs;
-  
+
   /** Fragment shader program */
   GLuint fs;
 };

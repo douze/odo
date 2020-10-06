@@ -1,5 +1,7 @@
 #include "material.hpp"
+#include "camera.hpp"
 #include "spdlog/spdlog.h"
+#include "transformation.hpp"
 #include <fstream>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -30,7 +32,15 @@ std::string Material::readShaderFile(const std::string& path) {
 
 void Material::use() const { glBindProgramPipeline(pipeline); }
 
-void Material::setTransformation(mesh::Transformation transformation) const {
+void Material::setTransformationMatrix(
+    mesh::Transformation transformation) const {
   glProgramUniformMatrix4fv(vs, 0, 1, GL_FALSE,
                             glm::value_ptr(transformation.getMatrix()));
+}
+
+void Material::setCameraMatrices(scene::Camera camera) const {
+  glProgramUniformMatrix4fv(vs, 1, 1, GL_FALSE,
+                            glm::value_ptr(camera.getViewMatrix()));
+    glProgramUniformMatrix4fv(vs, 2, 1, GL_FALSE,
+                            glm::value_ptr(camera.getProjectionMatrix()));
 }

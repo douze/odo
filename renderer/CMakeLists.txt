@@ -15,13 +15,15 @@ target_sources(renderer
       "src/scene.cpp"
       "src/mesh.cpp"
       "src/transformation.cpp"
+      "src/camera.cpp"
       "include/renderer.hpp"
       "include/triangle.hpp"
       "include/material.hpp"
       "include/vertexcolormaterial.hpp"
       "include/scene.hpp"
       "include/mesh.hpp"
-      "include/transformation.hpp")
+      "include/transformation.hpp"
+      "include/camera.hpp")
 target_include_directories(renderer
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries(renderer ${CONAN_LIBS})

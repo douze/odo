@@ -26,7 +26,10 @@ public:
    */
   int run();
 
-  scene::Scene scene;
+  /**
+   * @brief Return the scene.
+   */
+  scene::Scene& getScene() { return scene; }
 
 private:
   /**
@@ -63,7 +66,7 @@ private:
    * @note node may have children
    */
   void renderNode(scene::Node& node) const;
-
+  
 private:
   /** Handler for current window */
   GLFWwindow* window;
@@ -73,6 +76,9 @@ private:
 
   /** Heigth of the display */
   int height;
+
+  /** Scene storing the meshes */
+  scene::Scene scene;
 };
 
 } // namespace renderer

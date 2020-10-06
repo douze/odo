@@ -1,6 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "camera.hpp"
 #include "material.hpp"
 #include "mesh.hpp"
 #include "transformation.hpp"
@@ -52,27 +53,24 @@ public:
   /**
    * @brief Return the node's transformation.
    */
-  mesh::Transformation getTransformation() const {
-    return transformation;
-  }
-  
-  glm::mat4 getTransMat() {
-   return transformation.getMatrix(); 
-  }
+  mesh::Transformation getTransformation() const { return transformation; }
 
   /**
    * @brief Return the node's material.
    */
-  const std::shared_ptr<material::Material>& getMaterial() const { return material; }
+  const std::shared_ptr<material::Material>& getMaterial() const {
+    return material;
+  }
 
 private:
   /** Mesh attached to the node. Can be null for transform only node. */
   std::shared_ptr<mesh::Mesh> mesh;
 
+  /** Material attached to the node. Can be null for transform only node. */
+  std::shared_ptr<material::Material> material;
+
   /** Transformation attached to the node */
   mesh::Transformation transformation;
-
-  std::shared_ptr<material::Material> material;
 
   /** Children of the node. Used for scene graph.  */
   std::vector<std::reference_wrapper<Node>> children;
@@ -89,13 +87,19 @@ public:
   explicit Scene() noexcept;
 
   /**
-   * @brief Return the scene's root by const reference.
+   * @brief Return the scene's root by reference.
    */
-  const std::unique_ptr<Node>& getRoot() { return root; }
+  Node& getRoot() { return root; }
+  
+  void setCamera(std::shared_ptr<Camera> camera) { this->camera = camera; }
+  const Camera& getCamera() const { return *camera.get(); }
 
 private:
   /** Scene root */
-  std::unique_ptr<Node> root;
+  Node root;
+
+  /** Main camera used to render the scene */
+  std::shared_ptr<Camera> camera;
 };
 
 } // namespace scene
