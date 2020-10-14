@@ -9,6 +9,16 @@
 
 namespace renderer {
 
+struct Timer {
+  float delta;
+  float last;
+};
+
+struct Cursor {
+  float x;
+  float y;
+};
+
 /**
  * @brief Render the scene to the display.
  */
@@ -61,12 +71,30 @@ private:
   void enableDebugOutput() const;
 
   /**
+   * @brief Update delta time.
+   * @note Naive approch.
+   */
+  void updateTimer();
+
+  /**
+   * @brief Process the user keyboard.
+   * @param deltaTime from previous update
+   */
+  void processKeyboard(float deltaTime);
+
+  /**
+   * @brief Process the user mouse.
+   * @param deltaTime from previous update
+   */
+  void processMouse(float deltaTime);
+
+  /**
    * @brief Render a scene node.
    * @param node to render
    * @note node may have children
    */
   void renderNode(scene::Node& node) const;
-  
+
 private:
   /** Handler for current window */
   GLFWwindow* window;
@@ -79,6 +107,12 @@ private:
 
   /** Scene storing the meshes */
   scene::Scene scene;
+
+  /** Timer to handle "physics" */
+  Timer timer;
+
+  /** Cursor last position */
+  Cursor cursor;
 };
 
 } // namespace renderer

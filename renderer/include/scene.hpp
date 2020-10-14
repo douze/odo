@@ -92,7 +92,7 @@ public:
   Node& getRoot() { return root; }
   
   void setCamera(std::shared_ptr<Camera> camera) { this->camera = camera; }
-  const Camera& getCamera() const { return *camera.get(); }
+  Camera& getCamera() const { return *camera.get(); }
 
 private:
   /** Scene root */

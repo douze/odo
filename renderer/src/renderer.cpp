@@ -32,6 +32,8 @@ void Renderer::createWindow() {
     spdlog::error("Can't create GLFW window");
     std::exit(EXIT_FAILURE);
   }
+  glfwSetWindowUserPointer(window, static_cast<void*>(this));
+  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 void Renderer::initializeGlad() const {
@@ -134,16 +136,48 @@ void Renderer::enableDebugOutput() const {
       0);
 }
 
+void Renderer::processKeyboard(float deltaTime) {
+  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+    glfwSetWindowShouldClose(window, true);
+  }
+  if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+    getScene().getCamera().move(scene::Direction::FORWARD, deltaTime);
+  }
+  if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+    getScene().getCamera().move(scene::Direction::BACKWARD, deltaTime);
+  }
+  if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+    getScene().getCamera().move(scene::Direction::LEFT, deltaTime);
+  }
+  if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+    getScene().getCamera().move(scene::Direction::RIGHT, deltaTime);
+  }
+}
+
+void Renderer::processMouse(float deltaTime) {
+  // TODO
+  getScene().getCamera().rotate(0, 0, deltaTime);
+}
+
 int Renderer::run() {
   while (!glfwWindowShouldClose(window)) {
+    updateTimer();
     glViewport(0, 0, width, height);
     glClear(GL_COLOR_BUFFER_BIT);
+    processKeyboard(timer.delta);
+    processMouse(timer.delta);
     renderNode(scene.getRoot());
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
   glfwTerminate();
   return 0;
+}
+
+void Renderer::updateTimer() {
+  float current = glfwGetTime();
+  timer.delta = current - timer.last;
+  timer.last = current;
 }
 
 void Renderer::renderNode(scene::Node& node) const {
@@ -154,10 +188,7 @@ void Renderer::renderNode(scene::Node& node) const {
     node.getMesh()->render();
   }
 
-  for (const scene::Node& child : node.getChildren()) {
-    child.getMaterial()->use();
-    child.getMaterial()->setTransformationMatrix(child.getTransformation());
-    child.getMaterial()->setCameraMatrices(scene.getCamera());
-    child.getMesh()->render();
+  for (scene::Node& child : node.getChildren()) {
+    renderNode(child);
   }
 }
