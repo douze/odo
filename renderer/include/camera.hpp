@@ -17,8 +17,7 @@ public:
    * @brief Create a camera at the desired position.
    * @param position of the camera
    */
-  explicit Camera(const glm::vec3& position, const int width,
-                  const int height) noexcept;
+  explicit Camera(const glm::vec3& position, float aspect) noexcept;
 
   /**
    * @brief Return the view matrix.

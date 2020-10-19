@@ -164,6 +164,7 @@ int Renderer::run() {
     updateTimer();
     glViewport(0, 0, width, height);
     glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0.5, 1.0, 0.5, 1.0);
     processKeyboard(timer.delta);
     processMouse(timer.delta);
     renderNode(scene.getRoot());

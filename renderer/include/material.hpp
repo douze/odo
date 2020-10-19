@@ -27,6 +27,10 @@ public:
    */
   explicit Material(const std::string& vsPath,
                     const std::string& fsPath) noexcept;
+
+  explicit Material(const std::string& vsPath, const std::string& tcsPath,
+                    const std::string& tesPath,
+                    const std::string& fsPath) noexcept;
   /**
    * @brief Use this material for the next rendering.
    */
@@ -65,6 +69,9 @@ private:
 
   /** Vertex shader program */
   GLuint vs;
+
+  GLuint tcs;
+  GLuint tes;
 
   /** Fragment shader program */
   GLuint fs;

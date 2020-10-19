@@ -7,6 +7,8 @@
 
 using namespace renderer::material;
 
+#include <iostream>
+
 Material::Material(const std::string& vsPath,
                    const std::string& fsPath) noexcept {
   vs = createShaderProgram(GL_VERTEX_SHADER, vsPath);
@@ -14,6 +16,39 @@ Material::Material(const std::string& vsPath,
 
   glCreateProgramPipelines(1, &pipeline);
   glUseProgramStages(pipeline, GL_VERTEX_SHADER_BIT, vs);
+  glUseProgramStages(pipeline, GL_FRAGMENT_SHADER_BIT, fs);
+}
+
+void check(GLuint program) {
+
+  GLint isLinked = 0;
+  glGetProgramiv(program, GL_LINK_STATUS, (int*)&isLinked);
+  if (isLinked == GL_FALSE) {
+    GLint maxLength = 0;
+    glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
+    std::vector<GLchar> infoLog(maxLength);
+    glGetProgramInfoLog(program, maxLength, &maxLength, &infoLog[0]);
+
+    for (auto i : infoLog)
+      std::cout << i;
+  }
+}
+
+Material::Material(const std::string& vsPath, const std::string& tcsPath,
+                   const std::string& tesPath,
+                   const std::string& fsPath) noexcept {
+  vs = createShaderProgram(GL_VERTEX_SHADER, vsPath);
+  check(vs);
+  tcs = createShaderProgram(GL_TESS_CONTROL_SHADER, tcsPath);
+  check(tcs);
+  tes = createShaderProgram(GL_TESS_EVALUATION_SHADER, tesPath);
+  check(tes);
+  fs = createShaderProgram(GL_FRAGMENT_SHADER, fsPath);
+
+  glCreateProgramPipelines(1, &pipeline);
+  glUseProgramStages(pipeline, GL_VERTEX_SHADER_BIT, vs);
+  glUseProgramStages(pipeline, GL_TESS_CONTROL_SHADER_BIT, tcs);
+  glUseProgramStages(pipeline, GL_TESS_EVALUATION_SHADER_BIT, tes);
   glUseProgramStages(pipeline, GL_FRAGMENT_SHADER_BIT, fs);
 }
 
@@ -41,6 +76,6 @@ void Material::setTransformationMatrix(
 void Material::setCameraMatrices(scene::Camera camera) const {
   glProgramUniformMatrix4fv(vs, 1, 1, GL_FALSE,
                             glm::value_ptr(camera.getViewMatrix()));
-    glProgramUniformMatrix4fv(vs, 2, 1, GL_FALSE,
+  glProgramUniformMatrix4fv(vs, 2, 1, GL_FALSE,
                             glm::value_ptr(camera.getProjectionMatrix()));
 }
