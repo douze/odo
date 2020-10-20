@@ -29,7 +29,7 @@ public:
                     const std::string& fsPath) noexcept;
 
   explicit Material(const std::string& vsPath, const std::string& tcsPath,
-                    const std::string& tesPath,
+                    const std::string& tesPath, const std::string& gsPath,
                     const std::string& fsPath) noexcept;
   /**
    * @brief Use this material for the next rendering.
@@ -70,8 +70,14 @@ private:
   /** Vertex shader program */
   GLuint vs;
 
+  /** Tessellation control program */
   GLuint tcs;
+  
+  /** Tessellation evaluation program */
   GLuint tes;
+  
+  /** Geometry shader */
+  GLuint gs;
 
   /** Fragment shader program */
   GLuint fs;

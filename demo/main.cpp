@@ -35,7 +35,7 @@ int main() {
   renderer.getScene().getRoot().addChild(triangleNode);
 
   scene::Node terrainNode{terrain,
-                          mesh::Transformation{glm::vec3{0.0f, 0.0f, -4.0f}},
+                          mesh::Transformation{glm::vec3{0.0f, 0.0f, -2.0f}},
                           terrainMaterial};
   renderer.getScene().getRoot().addChild(terrainNode);
 
@@ -46,3 +46,4 @@ int main() {
 
   return renderer.run();
 }
+

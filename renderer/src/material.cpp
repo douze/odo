@@ -35,7 +35,7 @@ void check(GLuint program) {
 }
 
 Material::Material(const std::string& vsPath, const std::string& tcsPath,
-                   const std::string& tesPath,
+                   const std::string& tesPath, const std::string& gsPath,
                    const std::string& fsPath) noexcept {
   vs = createShaderProgram(GL_VERTEX_SHADER, vsPath);
   check(vs);
@@ -43,12 +43,15 @@ Material::Material(const std::string& vsPath, const std::string& tcsPath,
   check(tcs);
   tes = createShaderProgram(GL_TESS_EVALUATION_SHADER, tesPath);
   check(tes);
+  gs = createShaderProgram(GL_GEOMETRY_SHADER, gsPath);
+  check(gs);
   fs = createShaderProgram(GL_FRAGMENT_SHADER, fsPath);
 
   glCreateProgramPipelines(1, &pipeline);
   glUseProgramStages(pipeline, GL_VERTEX_SHADER_BIT, vs);
   glUseProgramStages(pipeline, GL_TESS_CONTROL_SHADER_BIT, tcs);
   glUseProgramStages(pipeline, GL_TESS_EVALUATION_SHADER_BIT, tes);
+  glUseProgramStages(pipeline, GL_GEOMETRY_SHADER_BIT, gs);
   glUseProgramStages(pipeline, GL_FRAGMENT_SHADER_BIT, fs);
 }
 

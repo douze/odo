@@ -160,10 +160,11 @@ void Renderer::processMouse(float deltaTime) {
 }
 
 int Renderer::run() {
+  glEnable(GL_DEPTH_TEST);
   while (!glfwWindowShouldClose(window)) {
     updateTimer();
     glViewport(0, 0, width, height);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.5, 1.0, 0.5, 1.0);
     processKeyboard(timer.delta);
     processMouse(timer.delta);
