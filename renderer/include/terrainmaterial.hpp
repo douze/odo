@@ -6,6 +6,9 @@
 namespace renderer {
 namespace material {
 
+/**
+ * @brief Material used for the terrain (using precomputed noise heightmap).
+ */
 class TerrainMaterial : public Material {
 public:
   explicit TerrainMaterial() noexcept;

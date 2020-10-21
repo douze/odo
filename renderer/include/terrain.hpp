@@ -2,7 +2,6 @@
 #define TERRAIN_H
 
 #include "mesh.hpp"
-#include <glad/glad.h>
 
 namespace renderer {
 namespace mesh {
@@ -13,18 +12,29 @@ struct TerrainVertex {
   float u, v;
 };
 
+/**
+ * @brief 3D terrain using patches.
+ */
 class Terrain : public Mesh {
 public:
+  /**
+   * @brief Create a terrain.
+   */
   explicit Terrain() noexcept;
 
+  /**
+   * @note Generate the noise texture.
+   */
   void prepare() override;
+
   void render() const override;
-  GLuint texture;
 
 private:
-  GLuint vao;
-  GLuint program;
+  /** Noise texture */
+  GLuint texture;
 };
+
 } // namespace mesh
 } // namespace renderer
+
 #endif // TERRAIN_H

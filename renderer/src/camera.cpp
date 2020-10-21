@@ -7,9 +7,9 @@ using namespace renderer::scene;
 Camera::Camera(const glm::vec3& position, float aspect) noexcept
     : position{position}, front{glm::vec3{0.0f, 0.0f, -1.0f}},
       up{glm::vec3{0.0f, 1.0f, 0.0f}}, right{glm::vec3{1.0f, 0.0f, 0.0f}},
-      yaw{0.0f}, pitch{0.0f}, dirty{true},
-      projectionMatrix{
-          glm::perspective(45.0f, aspect, 1.0f, 500.0f)} {}
+      yaw{0.0f}, pitch{0.0f}, projectionMatrix{glm::perspective(45.0f, aspect,
+                                                                1.0f, 500.0f)},
+      dirty{true} {}
 
 glm::mat4 Camera::getViewMatrix() {
   if (dirty) {

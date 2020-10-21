@@ -28,6 +28,10 @@ public:
   explicit Material(const std::string& vsPath,
                     const std::string& fsPath) noexcept;
 
+  /**
+   * @brief Create a material from vertex, tessellation, geometry & fragment
+   * shaders.
+   */
   explicit Material(const std::string& vsPath, const std::string& tcsPath,
                     const std::string& tesPath, const std::string& gsPath,
                     const std::string& fsPath) noexcept;
@@ -37,11 +41,15 @@ public:
   void use() const;
 
   /**
-   * @brief Apply the transformation to the material
+   * @brief Apply the transformation to the material.
    * @param transformation to apply
    */
   void setTransformationMatrix(mesh::Transformation transformation) const;
 
+  /**
+   * @brief Apply the camera matrices to the material.
+   * @param camera to grab matrices from
+   */
   void setCameraMatrices(scene::Camera camera) const;
 
 private:
@@ -56,7 +64,13 @@ private:
    * @param type of shader
    * @param path of the shader file
    * */
-  GLuint createShaderProgram(GLenum type, const std::string& path);
+  GLuint createShaderProgram(GLenum type, const std::string& path) const;
+  
+  /**
+   * @brief Check the program link status.
+   * @note Only print errors - no exception or exit code.
+   */
+  void checkLinkStatus(GLuint program) const;
 
   /**
    * @brief Shaders location.
@@ -72,10 +86,10 @@ private:
 
   /** Tessellation control program */
   GLuint tcs;
-  
+
   /** Tessellation evaluation program */
   GLuint tes;
-  
+
   /** Geometry shader */
   GLuint gs;
 

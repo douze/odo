@@ -16,6 +16,7 @@ public:
   /**
    * @brief Create a camera at the desired position.
    * @param position of the camera
+   * @param aspect for pespective projection
    */
   explicit Camera(const glm::vec3& position, float aspect) noexcept;
 
@@ -28,14 +29,14 @@ public:
    * @brief Return the projection matrix.
    */
   glm::mat4 getProjectionMatrix() const { return projectionMatrix; }
-  
+
   /**
-   * @brief Move the camera.
+   * @brief Move the camera along a direction.
    * @param direction to follow
    * @param deltaTime from previous update
    */
   void move(Direction direction, float deltaTime);
-  
+
   /**
    * @brief Rotate the camera.
    * @param x offset
@@ -47,19 +48,19 @@ public:
 private:
   /** Camera position */
   glm::vec3 position;
-  
+
   /** Front vector */
   glm::vec3 front;
-  
+
   /** Up vector */
   glm::vec3 up;
-  
+
   /** Right vector */
   glm::vec3 right;
-  
+
   /** Yaw rotation (x axis) */
   float yaw;
-  
+
   /** Pitch rotation (y axis) */
   float pitch;
 
@@ -75,4 +76,5 @@ private:
 
 } // namespace scene
 } // namespace renderer
+
 #endif // CAMERA_H

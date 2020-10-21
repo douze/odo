@@ -32,11 +32,14 @@ public:
   explicit Renderer(const int width, const int height) noexcept;
 
   /**
+   * @brief Method used before the run loop.
+   */
+  void prerun();
+
+  /**
    * @brief Run the main loop.
    */
   int run();
-
-  void prerun();
 
   /**
    * @brief Return the scene.
@@ -97,6 +100,11 @@ private:
    */
   void renderNode(scene::Node& node) const;
 
+  /**
+   * @brief Prepare the node before the first render.
+   * @param node to render
+   * @note node may have children
+   */
   void prepareNode(scene::Node& node) const;
 
 private:

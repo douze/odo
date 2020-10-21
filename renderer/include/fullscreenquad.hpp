@@ -3,6 +3,7 @@
 
 #include "mesh.hpp"
 #include <glad/glad.h>
+
 namespace renderer {
 namespace mesh {
 
@@ -11,16 +12,17 @@ struct FullScreenQuadVertex {
   float u, v;
 };
 
+/**
+ * @brief Full screen quad, mainly used for offscreen rendering.
+ */
 class FullScreenQuad : public Mesh {
 public:
+  /**
+   * @brief Create a full screen quad for offscreen rendering.
+   */
   explicit FullScreenQuad() noexcept;
 
-//   void prepare() const override;
   void render() const override;
-
-private:
-  GLuint vao;
-  GLuint program;
 };
 
 } // namespace mesh

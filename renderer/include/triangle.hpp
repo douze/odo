@@ -21,10 +21,6 @@ public:
   explicit Triangle() noexcept;
 
   void render() const;
-
-private:
-  GLuint vao;
-  GLuint program;
 };
 
 } // namespace mesh

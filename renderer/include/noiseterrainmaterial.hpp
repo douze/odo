@@ -6,6 +6,9 @@
 namespace renderer {
 namespace material {
 
+/**
+ * @brief Material used to generate terrain texture with noise.
+ */
 class NoiseTerrainMaterial : public Material {
 public:
   explicit NoiseTerrainMaterial() noexcept;

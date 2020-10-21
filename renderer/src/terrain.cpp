@@ -3,7 +3,7 @@
 #include "noiseterrainmaterial.hpp"
 
 using namespace renderer::mesh;
-#include <iostream>
+
 Terrain::Terrain() noexcept {
   const TerrainVertex vertices[4] = {{-1.0f, -1.0f, 1.f, 0.f, 0.f, 0.0f, 0.0f},
                                      {-1.0f, 1.0f, 0.f, 1.f, 0.f, 0.0f, 1.0f},
@@ -31,11 +31,7 @@ Terrain::Terrain() noexcept {
   glVertexArrayAttribBinding(vao, 2, 0);
 }
 
-#include <iostream>
-
 void Terrain::prepare() {
-  std::cout << "smg to do" << std::endl;
-
   // Full screen quad
   FullScreenQuad fsq;
   material::NoiseTerrainMaterial noiseTerrainMaterial;
@@ -51,12 +47,6 @@ void Terrain::prepare() {
 //   glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 //   glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glNamedFramebufferTexture(fbo, GL_COLOR_ATTACHMENT0, texture, 0);
-
-  if (glCheckNamedFramebufferStatus(fbo, GL_FRAMEBUFFER) !=
-      GL_FRAMEBUFFER_COMPLETE)
-    std::cerr << "framebuffer error\n";
-  else
-    std::cout << "ok\n";
 
   // Draw
   glViewport(0,0,800,600);
