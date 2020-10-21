@@ -9,6 +9,7 @@ namespace mesh {
  */
 class Mesh {
 public:
+  virtual void prepare();
   virtual void render() const = 0;
 };
 

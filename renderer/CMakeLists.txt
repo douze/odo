@@ -18,6 +18,8 @@ target_sources(renderer
       "src/camera.cpp"
       "src/terrain.cpp"
       "src/terrainmaterial.cpp"
+      "src/fullscreenquad.cpp"
+      "src/noiseterrainmaterial.cpp"
       "include/renderer.hpp"
       "include/triangle.hpp"
       "include/material.hpp"
@@ -27,7 +29,9 @@ target_sources(renderer
       "include/transformation.hpp"
       "include/camera.hpp"
       "include/terrain.hpp"
-      "include/terrainmaterial.hpp")
+      "include/terrainmaterial.hpp"
+      "include/fullscreenquad.hpp"
+      "include/noiseterrainmaterial.hpp")
 target_include_directories(renderer
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries(renderer ${CONAN_LIBS})

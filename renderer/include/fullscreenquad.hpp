@@ -1,30 +1,29 @@
-#ifndef TERRAIN_H
-#define TERRAIN_H
+#ifndef FULLSCREENQUAD_H
+#define FULLSCREENQUAD_H
 
 #include "mesh.hpp"
 #include <glad/glad.h>
-
 namespace renderer {
 namespace mesh {
 
-struct TerrainVertex {
+struct FullScreenQuadVertex {
   float x, y;
-  float r, g, b;
   float u, v;
 };
 
-class Terrain : public Mesh {
+class FullScreenQuad : public Mesh {
 public:
-  explicit Terrain() noexcept;
+  explicit FullScreenQuad() noexcept;
 
-  void prepare() override;
+//   void prepare() const override;
   void render() const override;
-  GLuint texture;
 
 private:
   GLuint vao;
   GLuint program;
 };
+
 } // namespace mesh
 } // namespace renderer
-#endif // TERRAIN_H
+
+#endif // FULLSCREENQUAD_H

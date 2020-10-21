@@ -159,6 +159,12 @@ void Renderer::processMouse(float deltaTime) {
   getScene().getCamera().rotate(0, 0, deltaTime);
 }
 
+#include <iostream>
+
+void Renderer::prerun() {
+  prepareNode(scene.getRoot());
+}
+
 int Renderer::run() {
   glEnable(GL_DEPTH_TEST);
   while (!glfwWindowShouldClose(window)) {
@@ -192,5 +198,15 @@ void Renderer::renderNode(scene::Node& node) const {
 
   for (scene::Node& child : node.getChildren()) {
     renderNode(child);
+  }
+}
+
+void Renderer::prepareNode(scene::Node& node) const {
+  if (node.getMesh() != nullptr) {
+    node.getMesh()->prepare();
+  }
+
+  for (scene::Node& child : node.getChildren()) {
+    prepareNode(child);
   }
 }

@@ -1,4 +1,6 @@
 #include "camera.hpp"
+#include "fullscreenquad.hpp"
+#include "noiseterrainmaterial.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
 #include "spdlog/spdlog.h"
@@ -12,7 +14,7 @@
 #include <string>
 
 using namespace renderer;
-
+#include <iostream>
 int main() {
   spdlog::set_level(spdlog::level::debug);
 
@@ -29,21 +31,33 @@ int main() {
   std::shared_ptr<mesh::Terrain> terrain{std::make_shared<mesh::Terrain>()};
   std::shared_ptr<material::TerrainMaterial> terrainMaterial{
       std::make_shared<material::TerrainMaterial>()};
+
+  std::shared_ptr<mesh::FullScreenQuad> fsq{
+      std::make_shared<mesh::FullScreenQuad>()};
+  std::shared_ptr<material::NoiseTerrainMaterial> noiseTerrainMaterial{
+      std::make_shared<material::NoiseTerrainMaterial>()};
+
   scene::Node triangleNode{triangle,
                            mesh::Transformation{glm::vec3{0.0f, 0.0f, -2.0f}},
                            vertexcolormaterial};
   renderer.getScene().getRoot().addChild(triangleNode);
 
   scene::Node terrainNode{terrain,
-                          mesh::Transformation{glm::vec3{0.0f, 0.0f, -2.0f}},
+                          mesh::Transformation{glm::vec3{0.0f, 0.0f, -4.0f}},
                           terrainMaterial};
   renderer.getScene().getRoot().addChild(terrainNode);
+
+//   scene::Node fsqNode{fsq,
+//                           mesh::Transformation{glm::vec3{0.0f, 0.0f, -2.0f}},
+//                           noiseTerrainMaterial};
+//   renderer.getScene().getRoot().addChild(fsqNode);
 
   scene::Camera camera{glm::vec3{0.0f, 0.0f, 0.0f},
                        width / static_cast<float>(height)};
 
   renderer.getScene().setCamera(std::make_shared<scene::Camera>(camera));
 
+  renderer.prerun();
+
   return renderer.run();
 }
-

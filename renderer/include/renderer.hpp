@@ -36,6 +36,8 @@ public:
    */
   int run();
 
+  void prerun();
+
   /**
    * @brief Return the scene.
    */
@@ -94,6 +96,8 @@ private:
    * @note node may have children
    */
   void renderNode(scene::Node& node) const;
+
+  void prepareNode(scene::Node& node) const;
 
 private:
   /** Handler for current window */

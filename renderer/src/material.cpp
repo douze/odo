@@ -9,16 +9,6 @@ using namespace renderer::material;
 
 #include <iostream>
 
-Material::Material(const std::string& vsPath,
-                   const std::string& fsPath) noexcept {
-  vs = createShaderProgram(GL_VERTEX_SHADER, vsPath);
-  fs = createShaderProgram(GL_FRAGMENT_SHADER, fsPath);
-
-  glCreateProgramPipelines(1, &pipeline);
-  glUseProgramStages(pipeline, GL_VERTEX_SHADER_BIT, vs);
-  glUseProgramStages(pipeline, GL_FRAGMENT_SHADER_BIT, fs);
-}
-
 void check(GLuint program) {
 
   GLint isLinked = 0;
@@ -32,6 +22,18 @@ void check(GLuint program) {
     for (auto i : infoLog)
       std::cout << i;
   }
+}
+
+Material::Material(const std::string& vsPath,
+                   const std::string& fsPath) noexcept {
+  vs = createShaderProgram(GL_VERTEX_SHADER, vsPath);
+  fs = createShaderProgram(GL_FRAGMENT_SHADER, fsPath);
+
+  glCreateProgramPipelines(1, &pipeline);
+  glUseProgramStages(pipeline, GL_VERTEX_SHADER_BIT, vs);
+  check(vs);
+  glUseProgramStages(pipeline, GL_FRAGMENT_SHADER_BIT, fs);
+  check(fs);
 }
 
 Material::Material(const std::string& vsPath, const std::string& tcsPath,
