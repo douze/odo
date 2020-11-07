@@ -10,54 +10,44 @@
 #include "triangle.hpp"
 #include "vertexcolormaterial.hpp"
 
-#include <iostream>
-#include <string>
+struct Configuration {
+  int width;
+  int height;
+};
 
-using namespace renderer;
-#include <iostream>
 int main() {
+  using namespace renderer;
+
+  // Configuration
   spdlog::set_level(spdlog::level::debug);
+  Configuration configuration{1280, 800};
 
-  const int width = 1280;
-  const int height = 800;
+  // Create renderer
+  Renderer renderer{configuration.width, configuration.height};
+  scene::Scene& scene{renderer.getScene()};
+  scene::Node& root{scene.getRoot()};
 
-  Renderer renderer{width, height};
-
-  // Do I really need shared_ptr ? For the update loop ?
-  std::shared_ptr<mesh::Triangle> triangle{std::make_shared<mesh::Triangle>()};
-  std::shared_ptr<material::VertexColorMaterial> vertexcolormaterial{
-      std::make_shared<material::VertexColorMaterial>()};
-
-  std::shared_ptr<mesh::Terrain> terrain{std::make_shared<mesh::Terrain>()};
-  std::shared_ptr<material::TerrainMaterial> terrainMaterial{
-      std::make_shared<material::TerrainMaterial>()};
-
-  std::shared_ptr<mesh::FullScreenQuad> fsq{
-      std::make_shared<mesh::FullScreenQuad>()};
-  std::shared_ptr<material::NoiseTerrainMaterial> noiseTerrainMaterial{
-      std::make_shared<material::NoiseTerrainMaterial>()};
-
-  scene::Node triangleNode{triangle,
+  // Add test triangle
+  scene::Node triangleNode{std::make_unique<mesh::Triangle>(mesh::Triangle{}),
                            mesh::Transformation{glm::vec3{0.0f, 0.0f, -2.0f}},
-                           vertexcolormaterial};
-  renderer.getScene().getRoot().addChild(triangleNode);
+                           std::make_unique<material::VertexColorMaterial>(
+                               material::VertexColorMaterial{})};
+  root.addChild(triangleNode);
 
-  scene::Node terrainNode{terrain,
-                          mesh::Transformation{glm::vec3{0.0f, 0.0f, -4.0f}},
-                          terrainMaterial};
-  renderer.getScene().getRoot().addChild(terrainNode);
+  // Add terrain
+  scene::Node terrainNode{
+      std::make_unique<mesh::Terrain>(mesh::Terrain{}),
+      mesh::Transformation{glm::vec3{0.0f, 0.0f, -4.0f}},
+      std::make_unique<material::TerrainMaterial>(material::TerrainMaterial{})};
+  root.addChild(terrainNode);
 
-//   scene::Node fsqNode{fsq,
-//                           mesh::Transformation{glm::vec3{0.0f, 0.0f, -2.0f}},
-//                           noiseTerrainMaterial};
-//   renderer.getScene().getRoot().addChild(fsqNode);
-
+  // Assign main camera
   scene::Camera camera{glm::vec3{0.0f, 0.0f, 0.0f},
-                       width / static_cast<float>(height)};
+                       configuration.width /
+                           static_cast<float>(configuration.height)};
+  scene.setCamera(std::make_shared<scene::Camera>(camera));
 
-  renderer.getScene().setCamera(std::make_shared<scene::Camera>(camera));
-
+  // Run loop
   renderer.prerun();
-
   return renderer.run();
 }

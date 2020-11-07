@@ -161,9 +161,7 @@ void Renderer::processMouse(float deltaTime) {
 
 #include <iostream>
 
-void Renderer::prerun() {
-  prepareNode(scene.getRoot());
-}
+void Renderer::prerun() { prepareNode(scene.getRoot()); }
 
 int Renderer::run() {
   glEnable(GL_DEPTH_TEST);
@@ -189,11 +187,11 @@ void Renderer::updateTimer() {
 }
 
 void Renderer::renderNode(scene::Node& node) const {
-  if (node.getMesh() != nullptr) {
-    node.getMaterial()->use();
-    node.getMaterial()->setTransformationMatrix(node.getTransformation());
-    node.getMaterial()->setCameraMatrices(scene.getCamera());
-    node.getMesh()->render();
+  if (node.isRenderable()) {
+    node.getMaterial().use();
+    node.getMaterial().setTransformationMatrix(node.getTransformation());
+    node.getMaterial().setCameraMatrices(scene.getCamera());
+    node.getMesh().render();
   }
 
   for (scene::Node& child : node.getChildren()) {
@@ -202,8 +200,8 @@ void Renderer::renderNode(scene::Node& node) const {
 }
 
 void Renderer::prepareNode(scene::Node& node) const {
-  if (node.getMesh() != nullptr) {
-    node.getMesh()->prepare();
+  if (node.isRenderable()) {
+    node.getMesh().prepare();
   }
 
   for (scene::Node& child : node.getChildren()) {

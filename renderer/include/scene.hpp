@@ -28,9 +28,9 @@ public:
    * @brief Create a node with a mesh.
    * @param mesh to attach to the node
    */
-  explicit Node(const std::shared_ptr<mesh::Mesh>& mesh,
+  explicit Node(std::unique_ptr<mesh::Mesh> mesh,
                 mesh::Transformation transformation,
-                const std::shared_ptr<material::Material>& material) noexcept;
+                std::unique_ptr<material::Material> material) noexcept;
 
   /**
    * @brief Add a node child to the current node.
@@ -41,7 +41,8 @@ public:
   /**
    * @brief Return the node's mesh by const reference.
    */
-  const std::shared_ptr<mesh::Mesh>& getMesh() const { return mesh; }
+  //   const std::shared_ptr<mesh::Mesh>& getMesh() const { return mesh; }
+  mesh::Mesh& getMesh() const { return *mesh.get(); }
 
   /**
    * @brief Return the node's children by const reference.
@@ -58,16 +59,16 @@ public:
   /**
    * @brief Return the node's material.
    */
-  const std::shared_ptr<material::Material>& getMaterial() const {
-    return material;
-  }
+  const material::Material& getMaterial() const { return *material.get(); }
+  
+  bool isRenderable() const { return mesh != nullptr && material != nullptr; }
 
 private:
   /** Mesh attached to the node. Can be null for transform only node. */
-  std::shared_ptr<mesh::Mesh> mesh;
+  std::unique_ptr<mesh::Mesh> mesh;
 
   /** Material attached to the node. Can be null for transform only node. */
-  std::shared_ptr<material::Material> material;
+  std::unique_ptr<material::Material> material;
 
   /** Transformation attached to the node */
   mesh::Transformation transformation;
@@ -90,7 +91,7 @@ public:
    * @brief Return the scene's root by reference.
    */
   Node& getRoot() { return root; }
-  
+
   void setCamera(std::shared_ptr<Camera> camera) { this->camera = camera; }
   Camera& getCamera() const { return *camera.get(); }
 
