@@ -8,7 +8,7 @@ OpenGL demo, using modern:
 
 **Prerequisites:** install 
 * dependencies: pkg-config xorg-dev libx11-xcb-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev
-* buidl system generator: [cmake](https://cmake.org/)
+* build system generator: [cmake](https://cmake.org/)
 * build system: [ninja](https://ninja-build.org/)
 * compiler: [clang++](https://clang.llvm.org/)
 * package manager: [conan](https://conan.io/)
@@ -53,6 +53,7 @@ sh build.sh
 
 ```bash
 ./build/bin/demo
+````
 
 #### Alternative
 
