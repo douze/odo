@@ -28,11 +28,11 @@ int main() {
   scene::Node& root{scene.getRoot()};
 
   // Add test triangle
-  scene::Node triangleNode{std::make_unique<mesh::Triangle>(mesh::Triangle{}),
+  /*scene::Node triangleNode{std::make_unique<mesh::Triangle>(mesh::Triangle{}),
                            mesh::Transformation{glm::vec3{0.0f, 0.0f, -2.0f}},
-                           std::make_unique<material::VertexColorMaterial>(
+                           std ::make_unique<material::VertexColorMaterial>(
                                material::VertexColorMaterial{})};
-  root.addChild(triangleNode);
+  root.addChild(triangleNode);*/
 
   // Add terrain
   scene::Node terrainNode{

@@ -60,17 +60,26 @@ private:
   static std::string readShaderFile(const std::string& path);
 
   /**
+   * @brief Parse shader content and replace #import directives with
+   * corresponding string
+   * @param content of the shader to enrich
+   */
+  void addImports(std::string& content) const;
+
+  /**
    * @brief Create a shader program.
    * @param type of shader
    * @param path of the shader file
    * */
   GLuint createShaderProgram(GLenum type, const std::string& path) const;
-  
+
   /**
    * @brief Check the program link status.
    * @note Only print errors - no exception or exit code.
+   * @param program to check
+   * @param path of the shader program
    */
-  void checkLinkStatus(GLuint program) const;
+  void checkLinkStatus(GLuint program, const std::string& path) const;
 
   /**
    * @brief Shaders location.

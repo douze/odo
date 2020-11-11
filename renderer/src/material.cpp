@@ -38,21 +38,39 @@ Material::Material(const std::string& vsPath, const std::string& tcsPath,
 
 GLuint Material::createShaderProgram(GLenum type,
                                      const std::string& path) const {
-  const std::string source = readShaderFile(path);
+  std::string source = readShaderFile(path);
+  addImports(source);
   const char* csource = source.c_str();
   const GLuint shaderProgram = glCreateShaderProgramv(type, 1, &csource);
-  checkLinkStatus(shaderProgram);
+  checkLinkStatus(shaderProgram, path);
   return shaderProgram;
 }
 
 std::string Material::readShaderFile(const std::string& path) {
-  spdlog::debug("Reading shader {0}", path);
   std::ifstream file{SHADER_FOLDER + path};
   return std::string{(std::istreambuf_iterator<char>(file)),
                      std::istreambuf_iterator<char>()};
 }
 
-void Material::checkLinkStatus(GLuint program) const {
+void Material::addImports(std::string& content) const {
+  const std::string import = "#import ";
+  const std::string eol = "\n";
+  std::string::size_type start = 0;
+  std::string::size_type end = 0;
+  std::string filename;
+  std::string subcontent;
+
+  while ((start = content.find(import, start)) != std::string::npos) {
+    end = content.find(eol, start);
+    filename =
+        content.substr(start + import.length(), end - start - import.length());
+    subcontent = readShaderFile(filename);
+    content.replace(start, end - start, subcontent + eol);
+    start = end + 1;
+  }
+}
+
+void Material::checkLinkStatus(GLuint program, const std::string& path) const {
   GLint isLinked = 0;
   glGetProgramiv(program, GL_LINK_STATUS, (int*)&isLinked);
   if (isLinked == GL_FALSE) {
@@ -60,9 +78,8 @@ void Material::checkLinkStatus(GLuint program) const {
     glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
     std::vector<GLchar> infoLog(maxLength);
     glGetProgramInfoLog(program, maxLength, &maxLength, &infoLog[0]);
-    spdlog::error(" > Invalid shader: {0}", std::string{infoLog.begin(), infoLog.end()});
-  } else {
-    spdlog::debug(" > Valid shader");
+    spdlog::error("Invalid shader {0}: {1}", path,
+                  std::string{infoLog.begin(), infoLog.end()});
   }
 }
 
