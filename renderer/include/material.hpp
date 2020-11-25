@@ -4,7 +4,7 @@
 #include <glad/glad.h>
 #include <string>
 
-namespace renderer {
+namespace odo {
 
 namespace mesh {
 class Transformation;
@@ -107,6 +107,6 @@ private:
 };
 
 } // namespace material
-} // namespace renderer
+} // namespace odo
 
 #endif // MATERIAL_H

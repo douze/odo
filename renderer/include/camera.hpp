@@ -3,8 +3,7 @@
 
 #include <glm/glm.hpp>
 
-namespace renderer {
-namespace scene {
+namespace odo::scene {
 
 enum class Direction { FORWARD, BACKWARD, LEFT, RIGHT };
 
@@ -74,7 +73,6 @@ private:
   bool dirty;
 };
 
-} // namespace scene
-} // namespace renderer
+} // namespace odo::scene
 
 #endif // CAMERA_H

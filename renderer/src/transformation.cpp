@@ -1,7 +1,7 @@
 #include "transformation.hpp"
 #include <glm/gtx/transform.hpp>
 
-using namespace renderer::mesh;
+using namespace odo::mesh;
 
 Transformation::Transformation(const glm::vec3& position) noexcept
     : position{position}, dirty{true} {}

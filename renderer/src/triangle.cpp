@@ -1,7 +1,7 @@
 #include "triangle.hpp"
 #include "vertexcolormaterial.hpp"
 
-using namespace renderer::mesh;
+using namespace odo::mesh;
 
 Triangle::Triangle() noexcept {
   const vertex_t vertices[3] = {{-0.6f, -0.4f, 0.f, 1.f, 0.f, 0.f},

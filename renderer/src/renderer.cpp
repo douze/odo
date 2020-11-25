@@ -3,7 +3,7 @@
 #include "spdlog/spdlog.h"
 #include "triangle.hpp"
 
-using namespace renderer;
+using namespace odo;
 
 Renderer::Renderer(const int width, const int height) noexcept
     : width{width}, height{height} {

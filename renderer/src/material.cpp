@@ -5,7 +5,7 @@
 #include <fstream>
 #include <glm/gtc/type_ptr.hpp>
 
-using namespace renderer::material;
+using namespace odo::material;
 
 #include <iostream>
 

@@ -3,8 +3,8 @@
 
 #include <glm/glm.hpp>
 
-namespace renderer {
-namespace mesh {
+namespace odo::mesh {
+
 /**
  * @brief Represent a 3D transformation.
  */
@@ -15,7 +15,7 @@ public:
    * @param position of the mesh
    */
   explicit Transformation(const glm::vec3& position) noexcept;
-  
+
   /**
    * @brief Return the computed transformation matrix.
    */
@@ -29,15 +29,14 @@ public:
 private:
   /** Position of the mesh */
   glm::vec3 position;
-  
+
   /** Transformation matrix */
   glm::mat4 matrix;
-  
+
   /** True if recompute is needed */
   bool dirty;
 };
 
-} // namespace mesh
-} // namespace renderer
+} // namespace odo::mesh
 
 #endif // TRANSFORMATION_H

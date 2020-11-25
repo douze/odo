@@ -3,8 +3,7 @@
 
 #include "mesh.hpp"
 
-namespace renderer {
-namespace mesh {
+namespace odo::mesh {
 
 struct TerrainVertex {
   float x, y;
@@ -34,7 +33,6 @@ private:
   GLuint texture;
 };
 
-} // namespace mesh
-} // namespace renderer
+} // namespace odo::mesh
 
 #endif // TERRAIN_H

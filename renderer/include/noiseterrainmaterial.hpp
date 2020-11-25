@@ -3,8 +3,7 @@
 
 #include "material.hpp"
 
-namespace renderer {
-namespace material {
+namespace odo::material {
 
 /**
  * @brief Material used to generate terrain texture with noise.
@@ -14,7 +13,6 @@ public:
   explicit NoiseTerrainMaterial() noexcept;
 };
 
-} // namespace material
-} // namespace renderer
+} // namespace odo::material
 
 #endif // NOISETERRAINMATERIAL_H

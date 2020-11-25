@@ -7,7 +7,7 @@
 // clang-format on
 #include "scene.hpp"
 
-namespace renderer {
+namespace odo {
 
 struct Timer {
   float delta;
@@ -127,6 +127,6 @@ private:
   Cursor cursor;
 };
 
-} // namespace renderer
+} // namespace odo
 
 #endif // RENDERER_H

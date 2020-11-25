@@ -4,8 +4,7 @@
 #include "mesh.hpp"
 #include <glad/glad.h>
 
-namespace renderer {
-namespace mesh {
+namespace odo::mesh {
 
 struct FullScreenQuadVertex {
   float x, y;
@@ -25,7 +24,6 @@ public:
   void render() const override;
 };
 
-} // namespace mesh
-} // namespace renderer
+} // namespace odo::mesh
 
 #endif // FULLSCREENQUAD_H

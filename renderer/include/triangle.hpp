@@ -4,8 +4,7 @@
 #include "mesh.hpp"
 #include <glad/glad.h>
 
-namespace renderer {
-namespace mesh {
+namespace odo::mesh {
 
 struct vertex_t {
   float x, y, z;
@@ -23,7 +22,6 @@ public:
   void render() const;
 };
 
-} // namespace mesh
-} // namespace renderer
+} // namespace odo::mesh
 
 #endif // TRIANGLE_H

@@ -1,3 +1,3 @@
 #include "mesh.hpp"
 
-using namespace renderer::mesh;
+using namespace odo::mesh;

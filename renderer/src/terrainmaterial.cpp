@@ -1,6 +1,6 @@
 #include "terrainmaterial.hpp"
 
-using namespace renderer::material;
+using namespace odo::material;
 
 TerrainMaterial::TerrainMaterial() noexcept
     : Material{"terrain.vs.glsl", "terrain.tcs.glsl", "terrain.tes.glsl",

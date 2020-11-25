@@ -16,7 +16,7 @@ struct Configuration {
 };
 
 int main() {
-  using namespace renderer;
+  using namespace odo;
 
   // Configuration
   spdlog::set_level(spdlog::level::debug);

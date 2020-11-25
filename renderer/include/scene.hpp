@@ -8,8 +8,7 @@
 #include <memory>
 #include <vector>
 
-namespace renderer {
-namespace scene {
+namespace odo::scene {
 
 /**
  * @brief Scene node. A node contains a mesh.
@@ -60,7 +59,7 @@ public:
    * @brief Return the node's material.
    */
   const material::Material& getMaterial() const { return *material.get(); }
-  
+
   bool isRenderable() const { return mesh != nullptr && material != nullptr; }
 
 private:
@@ -103,7 +102,6 @@ private:
   std::shared_ptr<Camera> camera;
 };
 
-} // namespace scene
-} // namespace renderer
+} // namespace odo::scene
 
 #endif // SCENE_H

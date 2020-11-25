@@ -3,8 +3,7 @@
 
 #include "material.hpp"
 
-namespace renderer {
-namespace material {
+namespace odo::material {
 
 /**
  * @brief Define one color per vertex.
@@ -14,6 +13,6 @@ public:
   explicit VertexColorMaterial() noexcept;
 };
 
-} // namespace material
-} // namespace renderer
+} // namespace odo::material
+
 #endif // VERTEXCOLORMATERIAL_H

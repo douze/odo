@@ -3,8 +3,7 @@
 
 #include "material.hpp"
 
-namespace renderer {
-namespace material {
+namespace odo::material {
 
 /**
  * @brief Material used for the terrain (using precomputed noise heightmap).
@@ -14,7 +13,6 @@ public:
   explicit TerrainMaterial() noexcept;
 };
 
-} // namespace material
-} // namespace renderer
+} // namespace odo::material
 
 #endif // TERRAINMATERIAL_H

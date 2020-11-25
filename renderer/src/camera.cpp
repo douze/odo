@@ -2,7 +2,7 @@
 #include <glm/gtx/transform.hpp>
 #include <iostream>
 
-using namespace renderer::scene;
+using namespace odo::scene;
 
 Camera::Camera(const glm::vec3& position, float aspect) noexcept
     : position{position}, front{glm::vec3{0.0f, 0.0f, -1.0f}},
