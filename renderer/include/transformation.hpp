@@ -17,14 +17,14 @@ public:
   explicit Transformation(const glm::vec3& position) noexcept;
 
   /**
-   * @brief Return the computed transformation matrix.
+   * @return the computed transformation matrix.
    */
-  glm::mat4 getMatrix();
+  glm::mat4 get_matrix();
 
   /**
-   * @brief Return the position by const reference.
+   * @return the position.
    */
-  const glm::vec3& getPosition() const { return position; }
+  const glm::vec3& get_position() const { return position; }
 
 private:
   /** Position of the mesh */

@@ -1,4 +1,4 @@
-#include "terrainmaterial.hpp"
+#include "terrain-material.hpp"
 
 using namespace odo::material;
 

@@ -1,4 +1,4 @@
-#include "fullscreenquad.hpp"
+#include "full-screen-quad.hpp"
 
 using namespace odo::mesh;
 

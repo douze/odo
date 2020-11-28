@@ -20,29 +20,29 @@ public:
   explicit Camera(const glm::vec3& position, float aspect) noexcept;
 
   /**
-   * @brief Return the view matrix.
+   * @return the view matrix.
    */
-  glm::mat4 getViewMatrix();
+  glm::mat4 get_view_matrix();
 
   /**
-   * @brief Return the projection matrix.
+   * @return the projection matrix.
    */
-  glm::mat4 getProjectionMatrix() const { return projectionMatrix; }
+  glm::mat4 get_projection_matrix() const { return projection_matrix; }
 
   /**
    * @brief Move the camera along a direction.
    * @param direction to follow
-   * @param deltaTime from previous update
+   * @param delta time from previous update
    */
-  void move(Direction direction, float deltaTime);
+  void move(Direction direction, float delta_time);
 
   /**
    * @brief Rotate the camera.
    * @param x offset
    * @param y offset
-   * @param deltaTime from previous update
+   * @param delta time from previous update
    */
-  void rotate(float x, float y, float deltaTime);
+  void rotate(float x, float y, float delta_time);
 
 private:
   /** Camera position */
@@ -64,10 +64,10 @@ private:
   float pitch;
 
   /** View matrix */
-  glm::mat4 viewMatrix;
+  glm::mat4 view_matrix;
 
   /** Projection matrix */
-  glm::mat4 projectionMatrix;
+  glm::mat4 projection_matrix;
 
   /** True if recompute of view matrix is needed */
   bool dirty;

@@ -42,70 +42,70 @@ public:
   int run();
 
   /**
-   * @brief Return the scene.
+   * @return the scene graph.
    */
-  scene::Scene& getScene() { return scene; }
+  scene::Scene& get_scene() { return scene; }
 
 private:
   /**
    * @brief Initialize GLFW.
    * @note May exit the application when failing.
    */
-  void initializeGlfw() const;
+  void initialize_glfw() const;
 
   /**
    * @brief Create the window, using custom flags.
    * @note May exit the application when failing.
    */
-  void createWindow();
+  void create_window();
 
   /**
    * @brief Initialize glad with current OpenGL context.
    * @note May exit the application when failing.
    */
-  void initializeGlad() const;
+  void initialize_glad() const;
 
   /**
    * @brief Print various information about versions.
    */
-  void printVersions() const;
+  void print_versions() const;
 
   /**
    * @brief Enable OpenGL debug output.
    */
-  void enableDebugOutput() const;
+  void enable_debug_output() const;
 
   /**
    * @brief Update delta time.
    * @note Naive approch.
    */
-  void updateTimer();
+  void update_timer();
 
   /**
    * @brief Process the user keyboard.
    * @param deltaTime from previous update
    */
-  void processKeyboard(float deltaTime);
+  void process_keyboard(float deltaTime);
 
   /**
    * @brief Process the user mouse.
    * @param deltaTime from previous update
    */
-  void processMouse(float deltaTime);
+  void process_mouse(float deltaTime);
 
   /**
    * @brief Render a scene node.
    * @param node to render
    * @note node may have children
    */
-  void renderNode(scene::Node& node) const;
+  void render_node(scene::Node& node) const;
 
   /**
    * @brief Prepare the node before the first render.
    * @param node to render
    * @note node may have children
    */
-  void prepareNode(scene::Node& node) const;
+  void prepare_node(scene::Node& node) const;
 
 private:
   /** Handler for current window */

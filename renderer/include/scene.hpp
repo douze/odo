@@ -27,39 +27,38 @@ public:
    * @brief Create a node with a mesh.
    * @param mesh to attach to the node
    */
-  explicit Node(std::unique_ptr<mesh::Mesh> mesh,
-                mesh::Transformation transformation,
+  explicit Node(std::unique_ptr<mesh::Mesh> mesh, mesh::Transformation transformation,
                 std::unique_ptr<material::Material> material) noexcept;
 
   /**
    * @brief Add a node child to the current node.
    * @param child to add
    */
-  void addChild(Node& child);
+  void add_child(Node& child);
 
   /**
-   * @brief Return the node's mesh by const reference.
+   * @return the node's mesh.
    */
-  //   const std::shared_ptr<mesh::Mesh>& getMesh() const { return mesh; }
-  mesh::Mesh& getMesh() const { return *mesh.get(); }
+  mesh::Mesh& get_mesh() const { return *mesh.get(); }
 
   /**
-   * @brief Return the node's children by const reference.
+   * @return the node's children.
    */
-  const std::vector<std::reference_wrapper<Node>>& getChildren() const {
-    return children;
-  }
+  const std::vector<std::reference_wrapper<Node>>& get_children() const { return children; }
 
   /**
-   * @brief Return the node's transformation.
+   * @return the node's transformation.
    */
-  mesh::Transformation getTransformation() const { return transformation; }
+  mesh::Transformation get_transformation() const { return transformation; }
 
   /**
-   * @brief Return the node's material.
+   * @return the node's material.
    */
-  const material::Material& getMaterial() const { return *material.get(); }
+  const material::Material& get_material() const { return *material.get(); }
 
+  /**
+   * @return true if the node is renderable.
+   */
   bool isRenderable() const { return mesh != nullptr && material != nullptr; }
 
 private:
@@ -87,12 +86,21 @@ public:
   explicit Scene() noexcept;
 
   /**
-   * @brief Return the scene's root by reference.
+   * @return the scene's root.
    */
-  Node& getRoot() { return root; }
+  Node& get_root() { return root; }
 
-  void setCamera(std::shared_ptr<Camera> camera) { this->camera = camera; }
-  Camera& getCamera() const { return *camera.get(); }
+  /**
+   * @brief Attach the main camera to the scene.
+   * @note Main camera is used for standard rendering.
+   * @param camera to attach
+   */
+  void attach_main_camera(std::shared_ptr<Camera> camera) { this->camera = camera; }
+
+  /**
+   * @return the main camera of the scene.
+   */
+  Camera& get_main_camera() const { return *camera.get(); }
 
 private:
   /** Scene root */

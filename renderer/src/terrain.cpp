@@ -1,6 +1,6 @@
 #include "terrain.hpp"
-#include "fullscreenquad.hpp"
-#include "noiseterrainmaterial.hpp"
+#include "full-screen-quad.hpp"
+#include "noise-terrain-material.hpp"
 
 using namespace odo::mesh;
 
@@ -34,7 +34,7 @@ Terrain::Terrain() noexcept {
 void Terrain::prepare() {
   // Full screen quad
   FullScreenQuad fsq;
-  material::NoiseTerrainMaterial noiseTerrainMaterial;
+  material::NoiseTerrainMaterial noise_terrain_material;
 
   // FBO
   GLuint fbo;
@@ -57,7 +57,7 @@ void Terrain::prepare() {
   glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  noiseTerrainMaterial.use();
+  noise_terrain_material.use();
   fsq.render();
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);

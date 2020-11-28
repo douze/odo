@@ -1,4 +1,4 @@
-#include "vertexcolormaterial.hpp"
+#include "vertex-color-material.hpp"
 
 using namespace odo::material;
 

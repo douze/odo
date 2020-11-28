@@ -1,4 +1,4 @@
-#include "noiseterrainmaterial.hpp"
+#include "noise-terrain-material.hpp"
 
 using namespace odo::material;
 

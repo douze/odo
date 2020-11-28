@@ -1,5 +1,5 @@
 #include "triangle.hpp"
-#include "vertexcolormaterial.hpp"
+#include "vertex-color-material.hpp"
 
 using namespace odo::mesh;
 
