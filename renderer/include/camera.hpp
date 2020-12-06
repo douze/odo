@@ -40,14 +40,12 @@ public:
    * @brief Rotate the camera.
    * @param x offset
    * @param y offset
-   * @param delta time from previous update
    */
-  void rotate(float x, float y, float delta_time);
-
-private:
+  void rotate(float x, float y);
   /** Camera position */
   glm::vec3 position;
 
+private:
   /** Front vector */
   glm::vec3 front;
 
@@ -57,10 +55,10 @@ private:
   /** Right vector */
   glm::vec3 right;
 
-  /** Yaw rotation (x axis) */
+  /** Yaw rotation (y axis) */
   float yaw;
 
-  /** Pitch rotation (y axis) */
+  /** Pitch rotation (x axis) */
   float pitch;
 
   /** View matrix */

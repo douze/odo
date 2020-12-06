@@ -32,6 +32,15 @@ public:
   explicit Renderer(const int width, const int height) noexcept;
 
   /**
+   * @brief Callback of the cursor position.
+   * @note Mainly used to rotate main camera.
+   * @param window to grab user pointer from
+   * @param x_position of the cursor
+   * @param y_position of the cursor
+   */
+  static void cursor_position_callback(GLFWwindow* window, double x_position, double y_position);
+
+  /**
    * @brief Method used before the run loop.
    */
   void prerun();
@@ -83,15 +92,9 @@ private:
 
   /**
    * @brief Process the user keyboard.
-   * @param deltaTime from previous update
+   * @param delta_time from previous update
    */
-  void process_keyboard(float deltaTime);
-
-  /**
-   * @brief Process the user mouse.
-   * @param deltaTime from previous update
-   */
-  void process_mouse(float deltaTime);
+  void process_keyboard(float delta_time);
 
   /**
    * @brief Render a scene node.
@@ -124,7 +127,7 @@ private:
   Timer timer;
 
   /** Cursor last position */
-  Cursor cursor;
+  Cursor last_cursor;
 };
 
 } // namespace odo

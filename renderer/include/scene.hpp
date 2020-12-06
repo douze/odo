@@ -27,8 +27,8 @@ public:
    * @brief Create a node with a mesh.
    * @param mesh to attach to the node
    */
-  explicit Node(std::unique_ptr<mesh::Mesh> mesh, mesh::Transformation transformation,
-                std::unique_ptr<material::Material> material) noexcept;
+  explicit Node(std::unique_ptr<mesh::Mesh> mesh, std::unique_ptr<material::Material> material,
+                mesh::Transformation transformation) noexcept;
 
   /**
    * @brief Add a node child to the current node.
@@ -42,9 +42,9 @@ public:
   mesh::Mesh& get_mesh() const { return *mesh.get(); }
 
   /**
-   * @return the node's children.
+   * @return the node's material.
    */
-  const std::vector<std::reference_wrapper<Node>>& get_children() const { return children; }
+  const material::Material& get_material() const { return *material.get(); }
 
   /**
    * @return the node's transformation.
@@ -52,14 +52,14 @@ public:
   mesh::Transformation get_transformation() const { return transformation; }
 
   /**
-   * @return the node's material.
+   * @return the node's children.
    */
-  const material::Material& get_material() const { return *material.get(); }
+  const std::vector<std::reference_wrapper<Node>>& get_children() const { return children; }
 
   /**
    * @return true if the node is renderable.
    */
-  bool isRenderable() const { return mesh != nullptr && material != nullptr; }
+  bool is_renderable() const { return mesh != nullptr && material != nullptr; }
 
 private:
   /** Mesh attached to the node. Can be null for transform only node. */

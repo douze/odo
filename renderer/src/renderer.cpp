@@ -1,11 +1,13 @@
 #include "renderer.hpp"
+#include "glm/gtx/string_cast.hpp"
 #include "mesh.hpp"
 #include "spdlog/spdlog.h"
 #include "triangle.hpp"
 
 using namespace odo;
 
-Renderer::Renderer(const int width, const int height) noexcept : width{width}, height{height} {
+Renderer::Renderer(const int width, const int height) noexcept
+    : width{width}, height{height}, last_cursor{width / 2.0f, height / 2.0f} {
   initialize_glfw();
   create_window();
   initialize_glad();
@@ -33,6 +35,8 @@ void Renderer::create_window() {
   }
   glfwSetWindowUserPointer(window, static_cast<void*>(this));
   glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+  glfwSetCursorPosCallback(window, cursor_position_callback);
 }
 
 void Renderer::initialize_glad() const {
@@ -135,42 +139,50 @@ void Renderer::enable_debug_output() const {
       0);
 }
 
-void Renderer::process_keyboard(float deltaTime) {
+void Renderer::cursor_position_callback(GLFWwindow* window, double x_position, double y_position) {
+  Renderer* renderer = static_cast<Renderer*>(glfwGetWindowUserPointer(window));
+  float delta_x = x_position - renderer->last_cursor.x;
+  float delta_y = renderer->last_cursor.y - y_position;
+
+  renderer->get_scene().get_main_camera().rotate(delta_x, delta_y);
+
+  renderer->last_cursor.x = x_position;
+  renderer->last_cursor.y = y_position;
+}
+
+void Renderer::process_keyboard(float delta_time) {
+  scene::Camera& camera = get_scene().get_main_camera();
   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
     glfwSetWindowShouldClose(window, true);
   }
   if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-    get_scene().get_main_camera().move(scene::Direction::FORWARD, deltaTime);
+    camera.move(scene::Direction::FORWARD, delta_time);
   }
   if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-    get_scene().get_main_camera().move(scene::Direction::BACKWARD, deltaTime);
+    camera.move(scene::Direction::BACKWARD, delta_time);
   }
   if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-    get_scene().get_main_camera().move(scene::Direction::LEFT, deltaTime);
+    camera.move(scene::Direction::LEFT, delta_time);
   }
   if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-    get_scene().get_main_camera().move(scene::Direction::RIGHT, deltaTime);
+    camera.move(scene::Direction::RIGHT, delta_time);
+  }
+  if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) {
+    spdlog::debug(glm::to_string(camera.position));
   }
 }
-
-void Renderer::process_mouse(float deltaTime) {
-  // TODO
-  get_scene().get_main_camera().rotate(0, 0, deltaTime);
-}
-
-#include <iostream>
 
 void Renderer::prerun() { prepare_node(scene.get_root()); }
 
 int Renderer::run() {
   glEnable(GL_DEPTH_TEST);
+  glEnable(GL_CULL_FACE);
   while (!glfwWindowShouldClose(window)) {
     update_timer();
     glViewport(0, 0, width, height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glClearColor(0.5, 1.0, 0.5, 1.0);
     process_keyboard(timer.delta);
-    process_mouse(timer.delta);
     render_node(scene.get_root());
     glfwSwapBuffers(window);
     glfwPollEvents();
@@ -186,7 +198,7 @@ void Renderer::update_timer() {
 }
 
 void Renderer::render_node(scene::Node& node) const {
-  if (node.isRenderable()) {
+  if (node.is_renderable()) {
     node.get_material().use();
     node.get_material().set_transformation_matrix(node.get_transformation());
     node.get_material().set_camera_matrices(scene.get_main_camera());
@@ -199,7 +211,7 @@ void Renderer::render_node(scene::Node& node) const {
 }
 
 void Renderer::prepare_node(scene::Node& node) const {
-  if (node.isRenderable()) {
+  if (node.is_renderable()) {
     node.get_mesh().prepare();
   }
 

@@ -4,11 +4,10 @@
 using namespace odo::scene;
 using namespace odo::mesh;
 
-Node::Node(mesh::Transformation transformation) noexcept
-    : mesh{nullptr}, material{nullptr}, transformation{transformation} {}
+Node::Node(mesh::Transformation transformation) noexcept : Node{nullptr, nullptr, transformation} {}
 
-Node::Node(std::unique_ptr<mesh::Mesh> mesh, mesh::Transformation transformation,
-           std::unique_ptr<material::Material> material) noexcept
+Node::Node(std::unique_ptr<mesh::Mesh> mesh, std::unique_ptr<material::Material> material,
+           mesh::Transformation transformation) noexcept
     : mesh{std::move(mesh)}, material{std::move(material)}, transformation{transformation} {}
 
 void Node::add_child(Node& child) { children.push_back(child); }

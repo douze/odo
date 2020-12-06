@@ -36,12 +36,12 @@ int main() {
 
   // Add terrain
   scene::Node terrainNode{std::make_unique<mesh::Terrain>(mesh::Terrain{}),
-                          mesh::Transformation{glm::vec3{0.0f, 0.0f, -4.0f}},
-                          std::make_unique<material::TerrainMaterial>(material::TerrainMaterial{})};
+                          std::make_unique<material::TerrainMaterial>(material::TerrainMaterial{}),
+                          mesh::Transformation{glm::vec3{0.0f, 0.0f, 0.0f}}};
   root.add_child(terrainNode);
 
   // Assign main camera
-  scene::Camera camera{glm::vec3{0.0f, 0.0f, 0.0f}, configuration.width / static_cast<float>(configuration.height)};
+  scene::Camera camera{glm::vec3{0.0f, 0.0f, 4.0f}, configuration.width / static_cast<float>(configuration.height)};
   scene.attach_main_camera(std::make_shared<scene::Camera>(camera));
 
   // Run loop

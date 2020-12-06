@@ -7,8 +7,6 @@
 
 using namespace odo::material;
 
-#include <iostream>
-
 Material::Material(const std::string& vs_path, const std::string& fs_path) noexcept {
   vs = create_shader_program(GL_VERTEX_SHADER, vs_path);
   fs = create_shader_program(GL_FRAGMENT_SHADER, fs_path);

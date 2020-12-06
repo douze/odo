@@ -6,9 +6,9 @@ using namespace odo::mesh;
 
 Terrain::Terrain() noexcept {
   const TerrainVertex vertices[4] = {{-1.0f, -1.0f, 1.f, 0.f, 0.f, 0.0f, 0.0f},
-                                     {-1.0f, 1.0f, 0.f, 1.f, 0.f, 0.0f, 1.0f},
+                                     {1.0f, -1.0f, 0.f, 1.f, 0.f, 1.0f, 0.0f},
                                      {1.0f, 1.0f, 0.f, 0.f, 1.f, 1.0f, 1.0f},
-                                     {1.0f, -1.0f, 1.f, 1.f, 1.f, 1.0f, 0.0f}};
+                                     {-1.0f, 1.0f, 1.f, 1.f, 1.f, 0.0f, 1.0f}};
 
   GLuint vbo;
   glCreateBuffers(1, &vbo);
