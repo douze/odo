@@ -49,6 +49,7 @@ vec2 st = fs_in.uv;
   color = vec4(c,1.0);    
 
   // noise
-  float v = fbm(fs_in.uv);
+  float v = fbm(3.0*fs_in.uv);
+  v = v*0.5+0.5;
   color = vec4(v,v,v,1.0);
 };

@@ -10,7 +10,7 @@ Camera::Camera(const glm::vec3& position, float aspect) noexcept
       right{glm::vec3{1.0f, 0.0f, 0.0f}},
       yaw{-90.0f},
       pitch{0.0f},
-      projection_matrix{glm::perspective(45.0f, aspect, 1.0f, 500.0f)},
+      projection_matrix{glm::perspective(45.0f, aspect, 0.1f, 500.0f)},
       dirty{true} {}
 
 glm::mat4 Camera::get_view_matrix() {
