@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 // clang-format on
 #include "scene.hpp"
+#include "gui.hpp"
 
 namespace odo {
 
@@ -94,6 +95,8 @@ private:
    */
   void enable_debug_output() const;
 
+  void setup_gui() const;
+
   /**
    * @brief Update delta time.
    * @note Naive approch.
@@ -138,6 +141,9 @@ private:
 
   /** Cursor last position */
   Cursor last_cursor;
+
+  /** User interface */
+  Gui gui;
 };
 
 } // namespace odo

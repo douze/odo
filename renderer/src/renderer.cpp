@@ -1,8 +1,5 @@
 #include "renderer.hpp"
 #include "glm/gtx/string_cast.hpp"
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
 #include "mesh.hpp"
 #include "spdlog/spdlog.h"
 #include "triangle.hpp"
@@ -16,6 +13,7 @@ Renderer::Renderer(const int width, const int height) noexcept
   initialize_glad();
   print_versions();
   enable_debug_output();
+  setup_gui();
 }
 
 void Renderer::initialize_glfw() const {
@@ -37,8 +35,6 @@ void Renderer::create_window() {
     std::exit(EXIT_FAILURE);
   }
   glfwSetWindowUserPointer(window, static_cast<void*>(this));
-  //  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
   glfwSetCursorPosCallback(window, cursor_position_callback);
   glfwSetMouseButtonCallback(window, mouse_button_callback);
 }
@@ -143,12 +139,13 @@ void Renderer::enable_debug_output() const {
       0);
 }
 
+void Renderer::setup_gui() const { gui.setup(window); }
+
 void Renderer::cursor_position_callback(GLFWwindow* window, double x_position, double y_position) {
   if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) != GLFW_PRESS)
     return;
 
   ImGuiIO& io = ImGui::GetIO();
-  spdlog::debug(io.WantCaptureMouse);
   if (io.WantCaptureMouse == true)
     return;
 
@@ -163,7 +160,9 @@ void Renderer::cursor_position_callback(GLFWwindow* window, double x_position, d
 }
 
 void Renderer::mouse_button_callback(GLFWwindow* window, int button, int action, int modifiers) {
-
+  ImGuiIO& io = ImGui::GetIO();
+  if (io.WantCaptureMouse == true)
+    return;
   Renderer* renderer = static_cast<Renderer*>(glfwGetWindowUserPointer(window));
 
   if (button == GLFW_MOUSE_BUTTON_LEFT) {
@@ -186,7 +185,6 @@ void Renderer::process_keyboard(float delta_time) {
   }
 
   // Move camera
-  ImGuiIO& io = ImGui::GetIO();
   if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) != GLFW_PRESS)
     return;
   scene::Camera& camera = get_scene().get_main_camera();
@@ -207,118 +205,26 @@ void Renderer::process_keyboard(float delta_time) {
 void Renderer::prerun() { prepare_node(scene.get_root()); }
 
 int Renderer::run() {
-  /* IMGUI */
-  // Setup Dear ImGui context IMGUI_CHECKVERSION();
-  ImGui::CreateContext();
-  ImGuiIO& io = ImGui::GetIO();
-  (void)io;
-  // io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-  // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-  // Setup Dear ImGui style
-  ImGui::StyleColorsDark();
-  // ImGui::StyleColorsClassic();
-
-  // Setup Platform/Renderer backends
-  ImGui_ImplGlfw_InitForOpenGL(window, true);
-  const char* glsl_version = "#version 130";
-  ImGui_ImplOpenGL3_Init(glsl_version);
-
-  // Load Fonts
-  // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use
-  // ImGui::PushFont()/PopFont() to select them.
-  // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-  // - If the file cannot be loaded, the function will return NULL. Please handle those errors in your application (e.g.
-  // use an assertion, or display an error and quit).
-  // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling
-  // ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-  // - Read 'docs/FONTS.md' for more instructions and details.
-  // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double
-  // backslash \\ !
-  // io.Fonts->AddFontDefault();
-  // io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
-  // io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-  // io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
-  // io.Fonts->AddFontFromFileTTF("../../misc/fonts/ProggyTiny.ttf", 10.0f);
-  // ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL,
-  // io.Fonts->GetGlyphRangesJapanese()); IM_ASSERT(font != NULL);
-
-  // Our state
-  bool show_demo_window = true;
-  bool show_another_window = false;
-  ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-  /* IMGUI */
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
+  glClearColor(0.5, 1.0, 0.5, 1.0);
   while (!glfwWindowShouldClose(window)) {
-    // Poll and handle events (inputs, window resize, etc.)
-    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your
-    // inputs.
-    // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-    // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-    // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two
-    // flags.
-    glfwPollEvents();
-
-    /* IMGUI */
-    // Start the Dear ImGui frame
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-
-    // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to
-    // learn more about Dear ImGui!).
-    if (show_demo_window)
-      ImGui::ShowDemoWindow(&show_demo_window);
-    // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
-    {
-      static float f = 0.0f;
-      static int counter = 0;
-
-      ImGui::Begin("Hello, world!"); // Create a window called "Hello, world!" and append into it.
-
-      ImGui::Text("This is some useful text.");          // Display some text (you can use a format strings too)
-      ImGui::Checkbox("Demo Window", &show_demo_window); // Edit bools storing our window open/close state
-      ImGui::Checkbox("Another Window", &show_another_window);
-
-      ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-      ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-      if (ImGui::Button("Button")) // Buttons return true when clicked (most widgets return true when edited/activated)
-        counter++;
-      ImGui::SameLine();
-      ImGui::Text("counter = %d", counter);
-
-      ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate,
-                  ImGui::GetIO().Framerate);
-      ImGui::End();
-    }
-
-    // 3. Show another simple window.
-    if (show_another_window) {
-      ImGui::Begin("Another Window", &show_another_window); // Pass a pointer to our bool variable (the window will have
-                                                            // a closing button that will clear the bool when clicked)
-      ImGui::Text("Hello from another window!");
-      if (ImGui::Button("Close Me"))
-        show_another_window = false;
-      ImGui::End();
-    }
-
-    // Rendering
-    ImGui::Render();
-    /* IMGUI */
-
-    update_timer();
     glViewport(0, 0, width, height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(0.5, 1.0, 0.5, 1.0);
+
+    glfwPollEvents();
+    update_timer();
     process_keyboard(timer.delta);
     render_node(scene.get_root());
-
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    gui.render_frame();
 
     glfwSwapBuffers(window);
   }
+  ImGui_ImplOpenGL3_Shutdown();
+  ImGui_ImplGlfw_Shutdown();
+  ImGui::DestroyContext();
+
+  glfwDestroyWindow(window);
   glfwTerminate();
   return 0;
 }
