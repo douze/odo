@@ -2,51 +2,15 @@
 #include "glm/gtx/string_cast.hpp"
 #include "mesh.hpp"
 #include "spdlog/spdlog.h"
-#include "triangle.hpp"
+#include <GLFW/glfw3.h>
 
 using namespace odo;
 
 Renderer::Renderer(const int width, const int height) noexcept
-    : width{width}, height{height}, last_cursor{width / 2.0f, height / 2.0f} {
-  initialize_glfw();
-  create_window();
-  initialize_glad();
+    : width{width}, height{height}, window{width, height}, last_cursor{width / 2.0f, height / 2.0f}, gui{window} {
   print_versions();
   enable_debug_output();
-  setup_gui();
-}
-
-void Renderer::initialize_glfw() const {
-  if (glfwInit() == GLFW_FALSE) {
-    spdlog::error("Can't initialize GLFW");
-    std::exit(EXIT_FAILURE);
-  }
-}
-
-void Renderer::create_window() {
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-  window = glfwCreateWindow(width, height, "odo", nullptr, nullptr);
-  if (!window) {
-    glfwTerminate();
-    spdlog::error("Can't create GLFW window");
-    std::exit(EXIT_FAILURE);
-  }
-  glfwSetWindowUserPointer(window, static_cast<void*>(this));
-  glfwSetCursorPosCallback(window, cursor_position_callback);
-  glfwSetMouseButtonCallback(window, mouse_button_callback);
-}
-
-void Renderer::initialize_glad() const {
-  glfwMakeContextCurrent(window);
-  glfwSwapInterval(1);
-
-  if (gladLoadGLLoader((GLADloadproc)glfwGetProcAddress) == 0) {
-    spdlog::error("Can't initialize glad");
-    std::exit(EXIT_FAILURE);
-  }
+  window.set_user_pointer(this);
 }
 
 void Renderer::print_versions() const {
@@ -139,39 +103,29 @@ void Renderer::enable_debug_output() const {
       0);
 }
 
-void Renderer::setup_gui() const { gui.setup(window); }
-
 void Renderer::cursor_position_callback(GLFWwindow* window, double x_position, double y_position) {
-  if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) != GLFW_PRESS)
-    return;
-
-  ImGuiIO& io = ImGui::GetIO();
-  if (io.WantCaptureMouse == true)
-    return;
-
   Renderer* renderer = static_cast<Renderer*>(glfwGetWindowUserPointer(window));
-  float delta_x = x_position - renderer->last_cursor.x;
-  float delta_y = renderer->last_cursor.y - y_position;
 
-  renderer->get_scene().get_main_camera().rotate(delta_x, delta_y);
+  if (!renderer->window.is_mouse_pressed(GLFW_MOUSE_BUTTON_LEFT) || !renderer->gui.should_dispatch_mouse())
+    return;
 
-  renderer->last_cursor.x = x_position;
-  renderer->last_cursor.y = y_position;
+  Cursor delta{x_position - renderer->last_cursor.x, renderer->last_cursor.y - y_position};
+  renderer->get_scene().get_main_camera().rotate(delta.x, delta.y);
+  renderer->last_cursor = {x_position, y_position};
 }
 
 void Renderer::mouse_button_callback(GLFWwindow* window, int button, int action, int modifiers) {
-  ImGuiIO& io = ImGui::GetIO();
-  if (io.WantCaptureMouse == true)
-    return;
   Renderer* renderer = static_cast<Renderer*>(glfwGetWindowUserPointer(window));
+
+  if (!renderer->gui.should_dispatch_mouse())
+    return;
 
   if (button == GLFW_MOUSE_BUTTON_LEFT) {
     if (action == GLFW_PRESS) {
       glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
       double xpos, ypos;
       glfwGetCursorPos(window, &xpos, &ypos);
-      renderer->last_cursor.x = xpos;
-      renderer->last_cursor.y = ypos;
+      renderer->last_cursor = {xpos, ypos};
     } else if (action == GLFW_RELEASE) {
       glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
@@ -179,25 +133,24 @@ void Renderer::mouse_button_callback(GLFWwindow* window, int button, int action,
 }
 
 void Renderer::process_keyboard(float delta_time) {
-  // Exit
-  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-    glfwSetWindowShouldClose(window, true);
+  if (window.is_key_pressed(GLFW_KEY_ESCAPE)) {
+    window.mark_as_close();
   }
 
-  // Move camera
-  if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) != GLFW_PRESS)
+  if (!window.is_mouse_pressed(GLFW_MOUSE_BUTTON_LEFT) || !gui.should_dispatch_mouse())
     return;
+
   scene::Camera& camera = get_scene().get_main_camera();
-  if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+  if (window.is_key_pressed(GLFW_KEY_W)) {
     camera.move(scene::Direction::FORWARD, delta_time);
   }
-  if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+  if (window.is_key_pressed(GLFW_KEY_S)) {
     camera.move(scene::Direction::BACKWARD, delta_time);
   }
-  if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+  if (window.is_key_pressed(GLFW_KEY_A)) {
     camera.move(scene::Direction::LEFT, delta_time);
   }
-  if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+  if (window.is_key_pressed(GLFW_KEY_D)) {
     camera.move(scene::Direction::RIGHT, delta_time);
   }
 }
@@ -208,24 +161,22 @@ int Renderer::run() {
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   glClearColor(0.5, 1.0, 0.5, 1.0);
-  while (!glfwWindowShouldClose(window)) {
+  while (!window.should_close()) {
     glViewport(0, 0, width, height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glfwPollEvents();
+    window.pool_events();
     update_timer();
     process_keyboard(timer.delta);
     render_node(scene.get_root());
-    gui.render_frame();
+    gui.render_ui();
 
-    glfwSwapBuffers(window);
+    window.swap_buffers();
   }
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
 
-  glfwDestroyWindow(window);
-  glfwTerminate();
   return 0;
 }
 

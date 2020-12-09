@@ -21,6 +21,7 @@ target_sources(renderer
       "src/full-screen-quad.cpp"
       "src/noise-terrain-material.cpp"
       "src/gui.cpp"
+      "src/window.cpp"
       "src/imgui_impl_glfw.cpp"
       "src/imgui_impl_opengl3.cpp"
       "include/renderer.hpp"
@@ -36,6 +37,7 @@ target_sources(renderer
       "include/full-screen-quad.hpp"
       "include/noise-terrain-material.hpp"
       "include/gui.hpp"
+      "include/window.hpp"
       "include/imgui_impl_glfw.h"
       "include/imgui_impl_opengl3.h")
 target_include_directories(renderer

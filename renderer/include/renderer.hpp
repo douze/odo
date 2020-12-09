@@ -1,12 +1,11 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-// clang-format off
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
-// clang-format on
-#include "scene.hpp"
+
 #include "gui.hpp"
+#include "scene.hpp"
+#include "window.hpp"
 
 namespace odo {
 
@@ -16,8 +15,8 @@ struct Timer {
 };
 
 struct Cursor {
-  float x;
-  float y;
+  double x;
+  double y;
 };
 
 /**
@@ -68,24 +67,6 @@ public:
 
 private:
   /**
-   * @brief Initialize GLFW.
-   * @note May exit the application when failing.
-   */
-  void initialize_glfw() const;
-
-  /**
-   * @brief Create the window, using custom flags.
-   * @note May exit the application when failing.
-   */
-  void create_window();
-
-  /**
-   * @brief Initialize glad with current OpenGL context.
-   * @note May exit the application when failing.
-   */
-  void initialize_glad() const;
-
-  /**
    * @brief Print various information about versions.
    */
   void print_versions() const;
@@ -94,8 +75,6 @@ private:
    * @brief Enable OpenGL debug output.
    */
   void enable_debug_output() const;
-
-  void setup_gui() const;
 
   /**
    * @brief Update delta time.
@@ -124,14 +103,14 @@ private:
   void prepare_node(scene::Node& node) const;
 
 private:
-  /** Handler for current window */
-  GLFWwindow* window;
-
   /** Width of the display */
   int width;
 
   /** Heigth of the display */
   int height;
+
+  /** Main window */
+  Window window;
 
   /** Scene storing the meshes */
   scene::Scene scene;

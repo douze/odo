@@ -1,21 +1,16 @@
 #include "gui.hpp"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
 #include <imgui.h>
 
 using namespace odo;
 
-Gui::Gui() : show_demo_window{true}, show_another_window{false}, clear_color{ImVec4(0.45f, 0.55f, 0.60f, 1.00f)} {}
-
-void Gui::setup(GLFWwindow* window) const {
+Gui::Gui(const Window& window) noexcept
+    : show_demo_window{true}, show_another_window{false}, clear_color{ImVec4(0.45f, 0.55f, 0.60f, 1.00f)} {
   ImGui::CreateContext();
   ImGui::StyleColorsDark();
-  ImGui_ImplGlfw_InitForOpenGL(window, true);
-  ImGui_ImplOpenGL3_Init("#version 460 core");
+  window.init_gui();
 }
 
-void Gui::render_frame() {
-  /* IMGUI */
+void Gui::render_ui() {
   // Start the Dear ImGui frame
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
@@ -63,6 +58,6 @@ void Gui::render_frame() {
   // Rendering
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-  /* IMGUI */
 }
+
+bool Gui::should_dispatch_mouse() const { return ImGui::GetIO().WantCaptureMouse == false; }
