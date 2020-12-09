@@ -41,6 +41,16 @@ public:
   static void cursor_position_callback(GLFWwindow* window, double x_position, double y_position);
 
   /**
+   * @brief Callback of the mouse button.
+   * @note Used to activate/deactivate cursor.
+   * @param window to grab user pointer from
+   * @param button pressed or release
+   * @param action on the button
+   * @param modifiers key flags
+   */
+  static void mouse_button_callback(GLFWwindow* window, int button, int action, int modifiers);
+
+  /**
    * @brief Method used before the run loop.
    */
   void prerun();

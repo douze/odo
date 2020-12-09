@@ -4,6 +4,13 @@ OpenGL demo, using modern:
 * C++
 * OpenGL
 
+## Librairies
+*[glfw](https://github.com/glfw/glfw/)/3.3.2
+*[glad](https://github.com/Dav1dde/glad/)/0.1.33
+*[glm](https://github.com/g-truc/glm/)/0.9.9.8
+*[spdlog](https://github.com/gabime/spdlog/)/1.7.0
+*[imgui](https://github.com/ocornut/imgui/)/1.79
+
 ## Installation
 
 **Prerequisites:** install 

@@ -20,6 +20,8 @@ target_sources(renderer
       "src/terrain-material.cpp"
       "src/full-screen-quad.cpp"
       "src/noise-terrain-material.cpp"
+      "src/imgui_impl_glfw.cpp"
+      "src/imgui_impl_opengl3.cpp"
       "include/renderer.hpp"
       "include/triangle.hpp"
       "include/material.hpp"
@@ -31,7 +33,9 @@ target_sources(renderer
       "include/terrain.hpp"
       "include/terrain-material.hpp"
       "include/full-screen-quad.hpp"
-      "include/noise-terrain-material.hpp")
+      "include/noise-terrain-material.hpp"
+      "include/imgui_impl_glfw.h"
+      "include/imgui_impl_opengl3.h")
 target_include_directories(renderer
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries(renderer ${CONAN_LIBS})
