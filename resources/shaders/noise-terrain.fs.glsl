@@ -40,16 +40,19 @@ float fbm (in vec2 st) {
 
 void main() {
   color = vec4(fs_in.uv, 0.0, 1.0);
-  
+
 vec2 st = fs_in.uv;
   st = tile(st,10.0);
-  
+
   vec3 c = vec3(box(st,vec2(0.9)));
 
-  color = vec4(c,1.0);    
+  color = vec4(c,1.0);
 
   // noise
   float v = fbm(3.0*fs_in.uv);
   v = v*0.5+0.5;
   color = vec4(v,v,v,1.0);
+
+  if (fs_in.uv.x < 0.1f) color = vec4(1);
+  if (fs_in.uv.y < 0.1f) color = vec4(1);
 };

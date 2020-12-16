@@ -35,9 +35,9 @@ int main() {
   root.addChild(triangleNode);*/
 
   // Add terrain
-  scene::Node terrainNode{std::make_unique<mesh::Terrain>(mesh::Terrain{}),
+  scene::Node terrainNode{"Terrain", std::make_unique<mesh::Terrain>(mesh::Terrain{}),
                           std::make_unique<material::TerrainMaterial>(material::TerrainMaterial{}),
-                          mesh::Transformation{glm::vec3{0.0f}, glm::vec3{-90.0f, 0.0f, 0.0f}, glm::vec3{2.0f}}};
+                          mesh::Transformation{glm::vec3{0.0f}, glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{2.0f}}};
   root.add_child(terrainNode);
 
   // Assign main camera

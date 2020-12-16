@@ -6,6 +6,7 @@ in GS_OUT {
   vec3 wireframeDist;
 } fs_in;
 
+layout (location = 0) uniform bool wireframe;
 uniform sampler2D ourTexture;
 
 out vec4 color;
@@ -19,6 +20,6 @@ void main() {
 //   color = vec4(fs_in.color, 1.0);
   color = texture(ourTexture, fs_in.uv);
 
-  bool wireframe = true;
+  //bool wireframe = false;
   if (wireframe) color = vec4(mix(vec3(1.0), color.rgb, edgeFactor), color.a);
 }

@@ -1,6 +1,7 @@
 #include "terrain.hpp"
 #include "full-screen-quad.hpp"
 #include "noise-terrain-material.hpp"
+#include <imgui.h>
 
 using namespace odo::mesh;
 
@@ -69,4 +70,8 @@ void Terrain::render() const {
   glBindVertexArray(vao);
   glPatchParameteri(GL_PATCH_VERTICES, 4);
   glDrawArrays(GL_PATCHES, 0, 4);
+}
+
+void Terrain::render_ui() const {
+  ImGui::Image((void*)(intptr_t)texture, ImVec2(400, 400), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 }

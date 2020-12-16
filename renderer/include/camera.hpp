@@ -3,7 +3,11 @@
 
 #include <glm/glm.hpp>
 
-namespace odo::scene {
+namespace odo {
+
+class Gui;
+
+namespace scene {
 
 enum class Direction { FORWARD, BACKWARD, LEFT, RIGHT };
 
@@ -11,6 +15,7 @@ enum class Direction { FORWARD, BACKWARD, LEFT, RIGHT };
  * @brief Virtual camera for viewer controller.
  */
 class Camera {
+
 public:
   /**
    * @brief Create a camera at the desired position.
@@ -42,10 +47,16 @@ public:
    * @param y offset
    */
   void rotate(float x, float y);
+
+  /**
+   * @brief Render camera UI to GUI frame.
+   */
+  void render_ui() const;
+
+private:
   /** Camera position */
   glm::vec3 position;
 
-private:
   /** Front vector */
   glm::vec3 front;
 
@@ -69,8 +80,10 @@ private:
 
   /** True if recompute of view matrix is needed */
   bool dirty;
-};
 
-} // namespace odo::scene
+  friend class odo::Gui;
+};
+} // namespace scene
+} // namespace odo
 
 #endif // CAMERA_H

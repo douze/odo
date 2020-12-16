@@ -3,6 +3,7 @@
 
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "scene.hpp"
 #include "window.hpp"
 #include <imgui.h>
 
@@ -22,7 +23,7 @@ public:
   /**
    * @brief Render the user interface.
    */
-  void render_ui();
+  void render_ui(scene::Scene& scene);
 
   /**
    * @return true if UI should dispath mouse to main application.
@@ -30,9 +31,6 @@ public:
   bool should_dispatch_mouse() const;
 
 private:
-  bool show_demo_window;
-  bool show_another_window;
-  ImVec4 clear_color;
 };
 
 } // namespace odo

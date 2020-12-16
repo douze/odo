@@ -11,6 +11,13 @@ namespace odo::material {
 class TerrainMaterial : public Material {
 public:
   explicit TerrainMaterial() noexcept;
+
+  void render_ui() override;
+
+  void set_uniforms() const override;
+
+private:
+  bool use_wireframe = false;
 };
 
 } // namespace odo::material

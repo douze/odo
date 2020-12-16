@@ -169,7 +169,7 @@ int Renderer::run() {
     update_timer();
     process_keyboard(timer.delta);
     render_node(scene.get_root());
-    gui.render_ui();
+    gui.render_ui(scene);
 
     window.swap_buffers();
   }
@@ -188,9 +188,11 @@ void Renderer::update_timer() {
 
 void Renderer::render_node(scene::Node& node) const {
   if (node.is_renderable()) {
-    node.get_material().use();
-    node.get_material().set_transformation_matrix(node.get_transformation());
-    node.get_material().set_camera_matrices(scene.get_main_camera());
+    material::Material& material = node.get_material();
+    material.use();
+    material.set_transformation_matrix(node.get_transformation());
+    material.set_camera_matrices(scene.get_main_camera());
+    material.set_uniforms();
     node.get_mesh().render();
   }
 

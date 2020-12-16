@@ -50,6 +50,16 @@ public:
    */
   void set_camera_matrices(scene::Camera camera) const;
 
+  /**
+   * @brief Render the material UI to the GUI frame.
+   */
+  virtual void render_ui(){};
+
+  /**
+   * @brief Set uniforms.
+   */
+  virtual void set_uniforms() const {};
+
 private:
   /**
    * @param path of the shader file
@@ -87,6 +97,7 @@ private:
   /** Program pipeline */
   GLuint pipeline;
 
+protected:
   /** Vertex shader program */
   GLuint vs;
 

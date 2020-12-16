@@ -1,5 +1,6 @@
 #include "camera.hpp"
 #include <glm/gtx/transform.hpp>
+#include <imgui.h>
 
 using namespace odo::scene;
 
@@ -49,4 +50,18 @@ void Camera::rotate(float x, float y) {
                                    sin(glm::radians(yaw)) * cos(glm::radians(pitch))});
   right = glm::normalize(glm::cross(front, glm::vec3{0.0f, 1.0f, 0.0f}));
   up = glm::normalize(glm::cross(right, front));
+}
+
+void Camera::render_ui() const {
+  if (ImGui::CollapsingHeader("Camera")) {
+    ImGui::Text("x: %f", position.x);
+    ImGui::SameLine();
+    ImGui::Text("y: %f", position.y);
+    ImGui::SameLine();
+    ImGui::Text("z: %f", position.z);
+
+    ImGui::Text("yaw: %f", yaw);
+    ImGui::SameLine();
+    ImGui::Text("pitch: %f", pitch);
+  }
 }

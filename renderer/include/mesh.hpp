@@ -20,6 +20,11 @@ public:
    */
   virtual void render() const = 0;
 
+  /**
+   * @brief Render the mesh UI to the GUI frame.
+   */
+  virtual void render_ui() const {}
+
 protected:
   /** Vertex array object */
   GLuint vao;

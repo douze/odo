@@ -6,9 +6,14 @@
 #include "mesh.hpp"
 #include "transformation.hpp"
 #include <memory>
+#include <optional>
 #include <vector>
 
-namespace odo::scene {
+namespace odo {
+
+class Gui;
+
+namespace scene {
 
 /**
  * @brief Scene node. A node contains a mesh.
@@ -27,7 +32,7 @@ public:
    * @brief Create a node with a mesh.
    * @param mesh to attach to the node
    */
-  explicit Node(std::unique_ptr<mesh::Mesh> mesh, std::unique_ptr<material::Material> material,
+  explicit Node(const std::string& name, std::unique_ptr<mesh::Mesh> mesh, std::unique_ptr<material::Material> material,
                 mesh::Transformation transformation) noexcept;
 
   /**
@@ -44,7 +49,7 @@ public:
   /**
    * @return the node's material.
    */
-  const material::Material& get_material() const { return *material.get(); }
+  material::Material& get_material() const { return *material.get(); }
 
   /**
    * @return the node's transformation.
@@ -61,7 +66,21 @@ public:
    */
   bool is_renderable() const { return mesh != nullptr && material != nullptr; }
 
+  /**
+   * @return true if the node has a name.
+   */
+  bool has_name() const { return name.has_value(); }
+
+  /**
+   * @return the name of the node.
+   * @note We assume the name is not nullopt.
+   */
+  const std::string get_name() const { return name.value(); }
+
 private:
+  /** Optional name of the node. Mainly used for GUI */
+  std::optional<std::string> name;
+
   /** Mesh attached to the node. Can be null for transform only node. */
   std::unique_ptr<mesh::Mesh> mesh;
 
@@ -102,14 +121,22 @@ public:
    */
   Camera& get_main_camera() const { return *camera.get(); }
 
+  /**
+   * @brief Render the node UI to the GUI frame.
+   */
+  void render_ui(scene::Node& node);
+
 private:
   /** Scene root */
   Node root;
 
   /** Main camera used to render the scene */
   std::shared_ptr<Camera> camera;
+
+  friend odo::Gui;
 };
 
-} // namespace odo::scene
+} // namespace scene
+} // namespace odo
 
 #endif // SCENE_H
