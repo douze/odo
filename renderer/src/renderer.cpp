@@ -168,15 +168,12 @@ int Renderer::run() {
     window.pool_events();
     update_timer();
     process_keyboard(timer.delta);
-    render_node(scene.get_root());
+    render_node(scene.get_root(), std::nullopt);
+    // scene.render_node(scene.get_root(), std::nullopt);
     gui.render_ui(scene);
 
     window.swap_buffers();
   }
-  ImGui_ImplOpenGL3_Shutdown();
-  ImGui_ImplGlfw_Shutdown();
-  ImGui::DestroyContext();
-
   return 0;
 }
 
@@ -186,27 +183,51 @@ void Renderer::update_timer() {
   timer.last = current;
 }
 
-void Renderer::render_node(scene::Node& node) const {
+void Renderer::prepare_node(scene::Node& node) const {
   if (node.is_renderable()) {
+    node.get_mesh().prepare();
+  } else if (node.is_offscreen()) {
+    node.prepare_offscreen();
+  }
+
+  for (scene::Node& child : node.get_children()) {
+    prepare_node(child);
+  }
+}
+
+void Renderer::render_node(scene::Node& node, std::optional<std::reference_wrapper<scene::Node>> parent) const {
+  if (node.is_renderable()) {
+    glViewport(0, 0, 1280, 800);
+    glClearColor(0.5, 1.0, 0.5, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
     material::Material& material = node.get_material();
     material.use();
     material.set_transformation_matrix(node.get_transformation());
     material.set_camera_matrices(scene.get_main_camera());
     material.set_uniforms();
+    if (parent.has_value()) {
+      glBindTextureUnit(0, parent.value().get().get_material().get_offscreen_texture());
+    }
     node.get_mesh().render();
+  } else if (node.is_offscreen()) {
+    glViewport(0, 0, 800, 600);
+    glBindTexture(GL_TEXTURE_2D, node.get_material().get_offscreen_texture());
+    glActiveTexture(GL_TEXTURE0);
+    glBindFramebuffer(GL_FRAMEBUFFER, node.get_material().get_offscreen_fbo());
+
+    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    node.get_material().use();
+    node.get_material().set_uniforms();
+    node.get_mesh().render();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
   }
 
   for (scene::Node& child : node.get_children()) {
-    render_node(child);
-  }
-}
-
-void Renderer::prepare_node(scene::Node& node) const {
-  if (node.is_renderable()) {
-    node.get_mesh().prepare();
-  }
-
-  for (scene::Node& child : node.get_children()) {
-    prepare_node(child);
+    render_node(child, /*std::nullopt */ std::make_optional<std::reference_wrapper<scene::Node>>(node));
   }
 }

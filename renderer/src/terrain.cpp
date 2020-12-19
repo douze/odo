@@ -32,46 +32,8 @@ Terrain::Terrain() noexcept {
   glVertexArrayAttribBinding(vao, 2, 0);
 }
 
-void Terrain::prepare() {
-  // Full screen quad
-  FullScreenQuad fsq;
-  material::NoiseTerrainMaterial noise_terrain_material;
-
-  // FBO
-  GLuint fbo;
-  glCreateFramebuffers(1, &fbo);
-
-  // Texture
-  glCreateTextures(GL_TEXTURE_2D, 1, &texture);
-  glTextureStorage2D(texture, 1, GL_RGB8, 800, 600);
-  glTextureSubImage2D(texture, 0, 0, 0, 800, 600, GL_RGB, GL_UNSIGNED_BYTE, 0);
-  //   glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  //   glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glNamedFramebufferTexture(fbo, GL_COLOR_ATTACHMENT0, texture, 0);
-
-  // Draw
-  glViewport(0, 0, 800, 600);
-  glBindTexture(GL_TEXTURE_2D, texture);
-  glActiveTexture(GL_TEXTURE0);
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-
-  glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  noise_terrain_material.use();
-  fsq.render();
-
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
-
 void Terrain::render() const {
-  glBindTextureUnit(0, texture);
-
   glBindVertexArray(vao);
   glPatchParameteri(GL_PATCH_VERTICES, 4);
   glDrawArrays(GL_PATCHES, 0, 4);
-}
-
-void Terrain::render_ui() const {
-  ImGui::Image((void*)(intptr_t)texture, ImVec2(400, 400), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
 }

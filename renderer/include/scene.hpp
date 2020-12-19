@@ -33,13 +33,18 @@ public:
    * @param mesh to attach to the node
    */
   explicit Node(const std::string& name, std::unique_ptr<mesh::Mesh> mesh, std::unique_ptr<material::Material> material,
-                mesh::Transformation transformation) noexcept;
+                mesh::Transformation transformation, bool offscreen = false) noexcept;
 
   /**
    * @brief Add a node child to the current node.
    * @param child to add
    */
   void add_child(Node& child);
+
+  /**
+   * @brief Prepare the node for offscreen rendering.
+   */
+  void prepare_offscreen();
 
   /**
    * @return the node's mesh.
@@ -64,7 +69,12 @@ public:
   /**
    * @return true if the node is renderable.
    */
-  bool is_renderable() const { return mesh != nullptr && material != nullptr; }
+  bool is_renderable() const { return mesh != nullptr && material != nullptr && !offscreen; }
+
+  /**
+   * @return true if the node has to be renderer offscreen.
+   */
+  bool is_offscreen() const { return offscreen; }
 
   /**
    * @return true if the node has a name.
@@ -92,6 +102,9 @@ private:
 
   /** Children of the node. Used for scene graph.  */
   std::vector<std::reference_wrapper<Node>> children;
+
+  /** Node should be renderer offscreen if true */
+  bool offscreen;
 };
 
 /**

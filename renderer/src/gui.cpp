@@ -9,6 +9,12 @@ Gui::Gui(const Window& window) noexcept {
   window.init_gui();
 }
 
+Gui::~Gui() {
+  ImGui_ImplOpenGL3_Shutdown();
+  ImGui_ImplGlfw_Shutdown();
+  ImGui::DestroyContext();
+}
+
 void Gui::render_ui(scene::Scene& scene) {
   // Start the Dear ImGui frame
   ImGui_ImplOpenGL3_NewFrame();

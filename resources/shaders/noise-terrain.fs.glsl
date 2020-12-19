@@ -7,52 +7,28 @@ in VS_OUT {
   vec2 uv;
 } fs_in;
 
+layout (location = 0) uniform int fbm_octaves;
+layout (location = 1) uniform float fbm_amplitude;
+layout (location = 2) uniform float fbm_frequency;
+
 out vec4 color;
 
-vec2 tile(vec2 _st, float _zoom){
-  _st *= _zoom;
-  return fract(_st);
-}
-
-float box(vec2 _st, vec2 _size){
-  _size = vec2(0.5)-_size*0.5;
-  vec2 uv = smoothstep(_size,_size+vec2(0.0001),_st);
-  uv *= smoothstep(_size,_size+vec2(0.0001),vec2(1.0)-_st);
-  return uv.x*uv.y;
-}
-
-#define OCTAVES 6
 float fbm (in vec2 st) {
-    // Initial values
     float value = 0.0;
-    float amplitud = .5;
-    float frequency = 0.;
-    //
-    // Loop of octaves
-    for (int i = 0; i < OCTAVES; i++) {
-        value += amplitud * snoise(st);
-        st *= 2.;
-        amplitud *= .5;
+    int octaves = fbm_octaves;
+    float amplitude = fbm_amplitude;
+    float frequency = fbm_frequency;
+    for (int i = 0; i < octaves; i++) {
+        value += amplitude * snoise(st * frequency);
+        amplitude *= .5;
+        frequency *= 2.;
     }
     return value;
 }
 
 
 void main() {
-  color = vec4(fs_in.uv, 0.0, 1.0);
-
-vec2 st = fs_in.uv;
-  st = tile(st,10.0);
-
-  vec3 c = vec3(box(st,vec2(0.9)));
-
-  color = vec4(c,1.0);
-
-  // noise
-  float v = fbm(3.0*fs_in.uv);
+  float v = fbm(fs_in.uv);
   v = v*0.5+0.5;
   color = vec4(v,v,v,1.0);
-
-  if (fs_in.uv.x < 0.1f) color = vec4(1);
-  if (fs_in.uv.y < 0.1f) color = vec4(1);
 };

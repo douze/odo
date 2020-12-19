@@ -93,7 +93,7 @@ private:
    * @param node to render
    * @note node may have children
    */
-  void render_node(scene::Node& node) const;
+  void render_node(scene::Node& node, std::optional<std::reference_wrapper<scene::Node>> parent) const;
 
   /**
    * @brief Prepare the node before the first render.

@@ -38,7 +38,7 @@ void main() {
   tes_out.color = interpolate3(tes_in[0].color, tes_in[1].color,tes_in[2].color, tes_in[3].color).xyz;
 
   float heigth = texture(heightmap, tes_out.uv).x;
-  //gl_Position.y += heigth;
+  gl_Position.y += heigth;
 
 }
 

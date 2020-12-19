@@ -21,6 +21,11 @@ public:
   explicit Gui(const Window& window) noexcept;
 
   /**
+   * @brief Destroy the gui & binding with graphic context.
+   */
+  ~Gui();
+
+  /**
    * @brief Render the user interface.
    */
   void render_ui(scene::Scene& scene);

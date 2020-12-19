@@ -53,12 +53,18 @@ public:
   /**
    * @brief Render the material UI to the GUI frame.
    */
-  virtual void render_ui(){};
+  virtual void render_ui() = 0;
 
   /**
    * @brief Set uniforms.
    */
-  virtual void set_uniforms() const {};
+  virtual void set_uniforms() const = 0;
+
+  virtual void prepare_offscreen() {}
+
+  virtual GLuint get_offscreen_texture() const { return 0; }
+
+  virtual GLuint get_offscreen_fbo() const { return 0; }
 
 private:
   /**

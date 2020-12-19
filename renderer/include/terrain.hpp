@@ -21,15 +21,7 @@ public:
    */
   explicit Terrain() noexcept;
 
-  /**
-   * @copydoc
-   * @note Generate the noise texture.
-   */
-  void prepare() override;
-
   void render() const override;
-
-  void render_ui() const override;
 
 private:
   /** Noise texture */
