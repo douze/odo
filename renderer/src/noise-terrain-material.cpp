@@ -5,14 +5,14 @@ using namespace odo::material;
 
 NoiseTerrainMaterial::NoiseTerrainMaterial() noexcept : Material{"noise-terrain.vs.glsl", "noise-terrain.fs.glsl"} {}
 
-void NoiseTerrainMaterial::prepare_offscreen() {
+void NoiseTerrainMaterial::prepare_offscreen(const int width, const int height) {
   // FBO
   glCreateFramebuffers(1, &fbo);
 
   // Texture
   glCreateTextures(GL_TEXTURE_2D, 1, &texture);
-  glTextureStorage2D(texture, 1, GL_RGB8, 800, 600);
-  glTextureSubImage2D(texture, 0, 0, 0, 800, 600, GL_RGB, GL_UNSIGNED_BYTE, 0);
+  glTextureStorage2D(texture, 1, GL_RGB8, width, height);
+  glTextureSubImage2D(texture, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, 0);
   //   glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   //   glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glNamedFramebufferTexture(fbo, GL_COLOR_ATTACHMENT0, texture, 0);

@@ -43,8 +43,10 @@ public:
 
   /**
    * @brief Prepare the node for offscreen rendering.
+   * @param width of the display
+   * @param height of the display
    */
-  void prepare_offscreen();
+  void prepare_offscreen(const int width, const int height);
 
   /**
    * @return the node's mesh.

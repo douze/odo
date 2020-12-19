@@ -60,7 +60,7 @@ public:
    */
   virtual void set_uniforms() const = 0;
 
-  virtual void prepare_offscreen() {}
+  virtual void prepare_offscreen(const int width, const int height) {}
 
   virtual GLuint get_offscreen_texture() const { return 0; }
 

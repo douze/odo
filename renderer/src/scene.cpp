@@ -17,9 +17,9 @@ Node::Node(const std::string& name, std::unique_ptr<mesh::Mesh> mesh, std::uniqu
 
 void Node::add_child(Node& child) { children.push_back(child); }
 
-void Node::prepare_offscreen() {
+void Node::prepare_offscreen(const int width, const int height) {
   if (is_offscreen()) {
-    material->prepare_offscreen();
+    material->prepare_offscreen(width, height);
   }
 }
 

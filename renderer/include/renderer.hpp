@@ -102,6 +102,18 @@ private:
    */
   void prepare_node(scene::Node& node) const;
 
+  /**
+   * @brief Set state for classic rendering.
+   */
+  void set_render_state() const;
+
+  /**
+   * @brief Set state for offscreen rendering.
+   * @param fbo to render to
+   * @param texture to bind
+   */
+  void set_offscreen_render_state(GLuint fbo, GLuint texture) const;
+
 private:
   /** Width of the display */
   int width;

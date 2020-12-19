@@ -158,20 +158,14 @@ void Renderer::process_keyboard(float delta_time) {
 void Renderer::prerun() { prepare_node(scene.get_root()); }
 
 int Renderer::run() {
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_CULL_FACE);
-  glClearColor(0.5, 1.0, 0.5, 1.0);
+  set_render_state();
   while (!window.should_close()) {
-    glViewport(0, 0, width, height);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     window.pool_events();
     update_timer();
     process_keyboard(timer.delta);
     render_node(scene.get_root(), std::nullopt);
-    // scene.render_node(scene.get_root(), std::nullopt);
     gui.render_ui(scene);
-
     window.swap_buffers();
   }
   return 0;
@@ -187,7 +181,7 @@ void Renderer::prepare_node(scene::Node& node) const {
   if (node.is_renderable()) {
     node.get_mesh().prepare();
   } else if (node.is_offscreen()) {
-    node.prepare_offscreen();
+    node.prepare_offscreen(width, height);
   }
 
   for (scene::Node& child : node.get_children()) {
@@ -197,11 +191,6 @@ void Renderer::prepare_node(scene::Node& node) const {
 
 void Renderer::render_node(scene::Node& node, std::optional<std::reference_wrapper<scene::Node>> parent) const {
   if (node.is_renderable()) {
-    glViewport(0, 0, 1280, 800);
-    glClearColor(0.5, 1.0, 0.5, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
     material::Material& material = node.get_material();
     material.use();
     material.set_transformation_matrix(node.get_transformation());
@@ -212,22 +201,35 @@ void Renderer::render_node(scene::Node& node, std::optional<std::reference_wrapp
     }
     node.get_mesh().render();
   } else if (node.is_offscreen()) {
-    glViewport(0, 0, 800, 600);
-    glBindTexture(GL_TEXTURE_2D, node.get_material().get_offscreen_texture());
-    glActiveTexture(GL_TEXTURE0);
-    glBindFramebuffer(GL_FRAMEBUFFER, node.get_material().get_offscreen_fbo());
-
-    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    node.get_material().use();
-    node.get_material().set_uniforms();
+    material::Material& material = node.get_material();
+    set_offscreen_render_state(material.get_offscreen_fbo(), material.get_offscreen_texture());
+    material.use();
+    material.set_uniforms();
     node.get_mesh().render();
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    set_render_state();
   }
 
   for (scene::Node& child : node.get_children()) {
     render_node(child, /*std::nullopt */ std::make_optional<std::reference_wrapper<scene::Node>>(node));
   }
+}
+
+void Renderer::set_render_state() const {
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_CULL_FACE);
+  glViewport(0, 0, width, height);
+  glClearColor(0.5, 1.0, 0.5, 1.0);
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void Renderer::set_offscreen_render_state(GLuint fbo, GLuint texture) const {
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_CULL_FACE);
+  glViewport(0, 0, width, height);
+  glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+  glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glBindTexture(GL_TEXTURE_2D, texture);
+  glActiveTexture(GL_TEXTURE0);
 }
