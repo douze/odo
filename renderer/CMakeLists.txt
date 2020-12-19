@@ -9,7 +9,6 @@ add_library(renderer STATIC)
 target_sources(renderer 
 	PRIVATE 
       "src/renderer.cpp"
-      "src/triangle.cpp"
       "src/material.cpp"
       "src/vertex-color-material.cpp"
       "src/scene.cpp"
@@ -25,7 +24,6 @@ target_sources(renderer
       "src/imgui_impl_glfw.cpp"
       "src/imgui_impl_opengl3.cpp"
       "include/renderer.hpp"
-      "include/triangle.hpp"
       "include/material.hpp"
       "include/vertex-color-material.hpp"
       "include/scene.hpp"

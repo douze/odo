@@ -7,7 +7,6 @@
 #include "terrain-material.hpp"
 #include "terrain.hpp"
 #include "transformation.hpp"
-#include "triangle.hpp"
 #include "vertex-color-material.hpp"
 
 struct Configuration {
@@ -26,13 +25,6 @@ int main() {
   Renderer renderer{configuration.width, configuration.height};
   scene::Scene& scene{renderer.get_scene()};
   scene::Node& root{scene.get_root()};
-
-  // Add test triangle
-  /*scene::Node triangleNode{std::make_unique<mesh::Triangle>(mesh::Triangle{}),
-                           mesh::Transformation{glm::vec3{0.0f, 0.0f, -2.0f}},
-                           std ::make_unique<material::VertexColorMaterial>(
-                               material::VertexColorMaterial{})};
-  root.addChild(triangleNode);*/
 
   // Add full screen quad for noise
   scene::Node noiseTerrainNode{"Material: Noise Terrain",
