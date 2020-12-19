@@ -20,9 +20,10 @@ public:
   /**
    * @brief Create a camera at the desired position.
    * @param position of the camera
+   * @param ortientation of the camera
    * @param aspect for pespective projection
    */
-  explicit Camera(const glm::vec3& position, float aspect) noexcept;
+  explicit Camera(const glm::vec3& position, const glm::vec2& orientation, float aspect) noexcept;
 
   /**
    * @return the view matrix.
@@ -52,6 +53,12 @@ public:
    * @brief Render camera UI to GUI frame.
    */
   void render_ui() const;
+
+private:
+  /**
+   * @brief Update the view vectors.
+   */
+  void update_vectors();
 
 private:
   /** Camera position */

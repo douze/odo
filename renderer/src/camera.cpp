@@ -4,15 +4,17 @@
 
 using namespace odo::scene;
 
-Camera::Camera(const glm::vec3& position, float aspect) noexcept
+Camera::Camera(const glm::vec3& position, const glm::vec2& orientation, float aspect) noexcept
     : position{position},
       front{glm::vec3{0.0f, 0.0f, -1.0f}},
       up{glm::vec3{0.0f, 1.0f, 0.0f}},
       right{glm::vec3{1.0f, 0.0f, 0.0f}},
-      yaw{-90.0f},
-      pitch{0.0f},
+      yaw{orientation.x},
+      pitch{orientation.y},
       projection_matrix{glm::perspective(45.0f, aspect, 0.1f, 500.0f)},
-      dirty{true} {}
+      dirty{true} {
+  update_vectors();
+}
 
 glm::mat4 Camera::get_view_matrix() {
   if (dirty) {
@@ -46,10 +48,7 @@ void Camera::rotate(float x, float y) {
   yaw += x * 0.1;
   pitch += y * 0.1;
 
-  front = glm::normalize(glm::vec3{cos(glm::radians(yaw)) * cos(glm::radians(pitch)), sin(glm::radians(pitch)),
-                                   sin(glm::radians(yaw)) * cos(glm::radians(pitch))});
-  right = glm::normalize(glm::cross(front, glm::vec3{0.0f, 1.0f, 0.0f}));
-  up = glm::normalize(glm::cross(right, front));
+  update_vectors();
 }
 
 void Camera::render_ui() const {
@@ -64,4 +63,11 @@ void Camera::render_ui() const {
     ImGui::SameLine();
     ImGui::Text("pitch: %f", pitch);
   }
+}
+
+void Camera::update_vectors() {
+  front = glm::normalize(glm::vec3{cos(glm::radians(yaw)) * cos(glm::radians(pitch)), sin(glm::radians(pitch)),
+                                   sin(glm::radians(yaw)) * cos(glm::radians(pitch))});
+  right = glm::normalize(glm::cross(front, glm::vec3{0.0f, 1.0f, 0.0f}));
+  up = glm::normalize(glm::cross(right, front));
 }
