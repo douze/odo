@@ -18,6 +18,7 @@ public:
 
 private:
   bool use_wireframe = false;
+  float height_factor = 10.0f;
 };
 
 } // namespace odo::material

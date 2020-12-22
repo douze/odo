@@ -12,6 +12,7 @@ out TE_OUT {
   vec3 color;
 } tes_out;
 
+layout (location = 0) uniform float height_factor;
 uniform sampler2D heightmap;
 
 vec4 interpolate4(in vec4 v0, in vec4 v1, in vec4 v2, in vec4 v3) {
@@ -38,7 +39,7 @@ void main() {
   tes_out.color = interpolate3(tes_in[0].color, tes_in[1].color,tes_in[2].color, tes_in[3].color).xyz;
 
   float heigth = texture(heightmap, tes_out.uv).x;
-  gl_Position.y += heigth;
+  gl_Position.y += heigth * height_factor;
 
 }
 

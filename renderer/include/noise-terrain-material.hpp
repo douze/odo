@@ -26,9 +26,21 @@ private:
   GLuint fbo;
   GLuint texture;
 
-  int octaves = 6;
-  float amplitude = 0.5f;
-  float frequency = 3.0f;
+  bool use_demo_value = true;
+  int noise_function = 3;
+
+  int fbm_octaves = 6;
+  float fbm_amplitude_persistence[2] = {1.0f, 0.5f};
+  float fbm_frequency_lacunarity[2] = {1.0f, 2.0f};
+
+  int billow_octaves = 6;
+  float billow_amplitude_persistence[2] = {1.0f, 0.5f};
+  float billow_frequency_lacunarity[2] = {1.0f, 2.0f};
+
+  int rmf_octaves = 6;
+  float rmf_amplitude_persistence[2] = {1.0f, 2.0f};
+  float rmf_frequency_lacunarity[2] = {1.0f, 2.0f};
+  float rmf_h_offset[2] = {1.0f, 1.0f};
 };
 
 } // namespace odo::material
