@@ -5,11 +5,12 @@
 
 using namespace odo::mesh;
 
-Terrain::Terrain() noexcept {
-  const TerrainVertex vertices[4] = {{-1.0f, -1.0f, 1.f, 0.f, 0.f, 0.0f, 0.0f},
-                                     {1.0f, -1.0f, 0.f, 1.f, 0.f, 1.0f, 0.0f},
-                                     {1.0f, 1.0f, 0.f, 0.f, 1.f, 1.0f, 1.0f},
-                                     {-1.0f, 1.0f, 1.f, 1.f, 1.f, 0.0f, 1.0f}};
+Terrain::Terrain(const int patch_size) noexcept {
+  const float patch_half_size = patch_size / 2.0f;
+  const TerrainVertex vertices[4] = {{-patch_half_size, -patch_half_size, 0.0f, 0.0f},
+                                     {patch_half_size, -patch_half_size, 1.0f, 0.0f},
+                                     {patch_half_size, patch_half_size, 1.0f, 1.0f},
+                                     {-patch_half_size, patch_half_size, 0.0f, 1.0f}};
 
   GLuint vbo;
   glCreateBuffers(1, &vbo);
@@ -24,12 +25,8 @@ Terrain::Terrain() noexcept {
   glVertexArrayAttribBinding(vao, 0, 0);
 
   glEnableVertexArrayAttrib(vao, 1);
-  glVertexArrayAttribFormat(vao, 1, 3, GL_FLOAT, GL_FALSE, (sizeof(float) * 2));
+  glVertexArrayAttribFormat(vao, 1, 2, GL_FLOAT, GL_FALSE, (sizeof(float) * 2));
   glVertexArrayAttribBinding(vao, 1, 0);
-
-  glEnableVertexArrayAttrib(vao, 2);
-  glVertexArrayAttribFormat(vao, 2, 2, GL_FLOAT, GL_FALSE, (sizeof(float) * 5));
-  glVertexArrayAttribBinding(vao, 2, 0);
 }
 
 void Terrain::render() const {

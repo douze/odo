@@ -33,7 +33,7 @@ int main() {
                                mesh::Transformation{glm::vec3{0.0f}}, true};
 
   // Add terrain
-  scene::Node terrainNode{"Mesh: Terrain", std::make_unique<mesh::Terrain>(mesh::Terrain{}),
+  scene::Node terrainNode{"Mesh: Terrain", std::make_unique<mesh::Terrain>(mesh::Terrain{2, 1}),
                           std::make_unique<material::TerrainMaterial>(material::TerrainMaterial{}),
                           mesh::Transformation{glm::vec3{0.0f}, glm::vec3{-90.0f, 0.0f, 0.0f}, glm::vec3{20.0f}}};
   noiseTerrainNode.add_child(terrainNode);

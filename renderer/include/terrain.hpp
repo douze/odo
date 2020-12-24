@@ -7,7 +7,6 @@ namespace odo::mesh {
 
 struct TerrainVertex {
   float x, y;
-  float r, g, b;
   float u, v;
 };
 
@@ -18,8 +17,9 @@ class Terrain : public Mesh {
 public:
   /**
    * @brief Create a terrain.
+   * @param path_size
    */
-  explicit Terrain() noexcept;
+  explicit Terrain(const int patch_size) noexcept;
 
   void render() const override;
 
