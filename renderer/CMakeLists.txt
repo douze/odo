@@ -23,6 +23,7 @@ target_sources(renderer
       "src/window.cpp"
       "src/imgui_impl_glfw.cpp"
       "src/imgui_impl_opengl3.cpp"
+      "src/terrain-node.cpp"
       "include/renderer.hpp"
       "include/material.hpp"
       "include/vertex-color-material.hpp"
@@ -37,7 +38,9 @@ target_sources(renderer
       "include/gui.hpp"
       "include/window.hpp"
       "include/imgui_impl_glfw.h"
-      "include/imgui_impl_opengl3.h")
+      "include/imgui_impl_opengl3.h"
+      "include/gui-provider.hpp"
+      "include/terrain-node.hpp")
 target_include_directories(renderer
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries(renderer ${CONAN_LIBS})

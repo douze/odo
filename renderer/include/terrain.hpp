@@ -23,6 +23,8 @@ public:
 
   void render() const override;
 
+  int instance_count = 1;
+
 private:
   /** Noise texture */
   GLuint texture;

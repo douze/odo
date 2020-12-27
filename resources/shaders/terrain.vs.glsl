@@ -14,7 +14,7 @@ out VS_OUT {
 } vs_out;
 
 void main() {
-  gl_Position = projection * view * model * vec4(position, 0.0, 1.0);
+  gl_Position = projection * view * model * vec4(position + gl_InstanceID, 0.0, 1.0);
   vs_out.uv = uv;
   vs_out.color = color;
 }

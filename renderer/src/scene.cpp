@@ -23,16 +23,21 @@ void Node::prepare_offscreen(const int width, const int height) {
   }
 }
 
-Scene::Scene() noexcept : root{Node{Transformation{glm::vec3{0.f, 0.f, 0.f}}}} {}
-
-void Scene::render_ui(Node& node) {
-  if (node.is_renderable() || node.is_offscreen()) {
-    if (node.has_name() && ImGui::CollapsingHeader(node.get_name().c_str())) {
-      node.get_mesh().render_ui();
-      node.get_material().render_ui();
+void Node::render_ui() {
+  if (is_renderable() || is_offscreen()) {
+    if (has_name() && ImGui::CollapsingHeader(get_name().c_str())) {
+      get_mesh().render_ui();
+      get_material().render_ui();
     }
     // Do i need a case without collapsing header  ?
   }
+}
+
+Scene::Scene() noexcept : root{Node{Transformation{glm::vec3{0.f, 0.f, 0.f}}}} {}
+
+void Scene::render_ui(Node& node) {
+  node.render_ui();
+
   for (scene::Node& child : node.get_children()) {
     render_ui(child);
   }

@@ -2,6 +2,7 @@
 #define SCENE_H
 
 #include "camera.hpp"
+#include "gui-provider.hpp"
 #include "material.hpp"
 #include "mesh.hpp"
 #include "transformation.hpp"
@@ -19,7 +20,7 @@ namespace scene {
  * @brief Scene node. A node contains a mesh.
  * @note Will contains a transform in a near future.
  */
-class Node {
+class Node : public odo::GuiProvider {
 public:
   /**
    * @brief Create a node without mesh.
@@ -48,10 +49,14 @@ public:
    */
   void prepare_offscreen(const int width, const int height);
 
+  void render_ui() override;
+
   /**
    * @return the node's mesh.
    */
   mesh::Mesh& get_mesh() const { return *mesh.get(); }
+
+  mesh::Mesh* get_mesh_ptr() const { return mesh.get(); }
 
   /**
    * @return the node's material.

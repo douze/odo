@@ -35,5 +35,5 @@ Terrain::Terrain() noexcept {
 void Terrain::render() const {
   glBindVertexArray(vao);
   glPatchParameteri(GL_PATCH_VERTICES, 4);
-  glDrawArrays(GL_PATCHES, 0, 4);
+  glDrawArraysInstanced(GL_PATCHES, 0, 4, instance_count);
 }
