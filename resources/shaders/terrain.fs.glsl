@@ -4,6 +4,7 @@ in GS_OUT {
   vec2 uv;
   vec3 color;
   vec3 wireframeDist;
+  vec2 position;
 } fs_in;
 
 layout (location = 0) uniform bool wireframe;
@@ -22,4 +23,7 @@ void main() {
 
   //bool wireframe = false;
   if (wireframe) color = vec4(mix(vec3(1.0), color.rgb, edgeFactor), color.a);
+
+  //color = vec4(fs_in.uv, 0.0, 1.0);
+  //color = vec4(fs_in.position, 0.0, 1.0);
 }

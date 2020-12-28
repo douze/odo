@@ -16,6 +16,9 @@ public:
 
   void set_uniforms() const override;
 
+  int grid_size = 1;
+  float scale_xy = 1.0f;
+
 private:
   bool use_wireframe = false;
   float height_factor = 10.0f;

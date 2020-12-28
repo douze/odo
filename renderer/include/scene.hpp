@@ -63,6 +63,8 @@ public:
    */
   material::Material& get_material() const { return *material.get(); }
 
+  material::Material* get_material_ptr() const { return material.get(); }
+
   /**
    * @return the node's transformation.
    */

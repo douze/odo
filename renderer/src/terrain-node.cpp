@@ -1,4 +1,5 @@
 #include "terrain-node.hpp"
+#include "terrain-material.hpp"
 #include "terrain.hpp"
 #include <imgui.h>
 #include <spdlog/spdlog.h>
@@ -23,7 +24,7 @@ void TerrainNode::build_grid_size_list() {
 void TerrainNode::render_ui() {
   if (ImGui::CollapsingHeader("Node: Terrain")) {
     ImGui::Combo(
-        "Size", &grid_size,
+        "Size", &grid_size_selection,
         [](void* data, int idx, const char** out_text) {
           std::vector<std::string> from_data = *static_cast<std::vector<std::string>*>(data);
           *out_text = from_data[idx].c_str();
@@ -33,7 +34,12 @@ void TerrainNode::render_ui() {
     get_material().render_ui();
     // get_mesh().render_ui();
 
+    const int grid_size = grid_size_selection + 1; // 0 indexed
+
     odo::mesh::Terrain* t = dynamic_cast<odo::mesh::Terrain*>(get_mesh_ptr());
-    t->instance_count = grid_size + 1;
+    t->instance_count = grid_size * grid_size;
+
+    odo::material::TerrainMaterial* tm = dynamic_cast<odo::material::TerrainMaterial*>(get_material_ptr());
+    tm->grid_size = grid_size;
   }
 }
