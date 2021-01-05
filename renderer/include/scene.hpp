@@ -43,6 +43,11 @@ public:
   void add_child(Node& child);
 
   /**
+   * @brief Prepare the node for rendering.
+   */
+  void prepare();
+
+  /**
    * @brief Prepare the node for offscreen rendering.
    * @param width of the display
    * @param height of the display
@@ -50,6 +55,18 @@ public:
   void prepare_offscreen(const int width, const int height);
 
   void render_ui() override;
+
+  /**
+   * @brief Render the node.
+   * @param camera to render for
+   * @param parent of the node
+   */
+  virtual void render(const Camera& camera, std::optional<std::reference_wrapper<scene::Node>> parent);
+
+  /**
+   * @brief Render the node, offscreen.
+   */
+  virtual void render_offscreen();
 
   /**
    * @return the node's mesh.
@@ -83,7 +100,7 @@ public:
   /**
    * @return true if the node has to be renderer offscreen.
    */
-  bool is_offscreen() const { return offscreen; }
+  bool is_offscreen_renderable() const { return offscreen; }
 
   /**
    * @return true if the node has a name.

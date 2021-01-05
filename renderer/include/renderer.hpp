@@ -53,7 +53,7 @@ public:
   /**
    * @brief Method used before the run loop.
    */
-  void prerun();
+  void prepare();
 
   /**
    * @brief Run the main loop.
@@ -110,9 +110,8 @@ private:
   /**
    * @brief Set state for offscreen rendering.
    * @param fbo to render to
-   * @param texture to bind
    */
-  void set_offscreen_render_state(GLuint fbo, GLuint texture) const;
+  void set_offscreen_render_state(GLuint fbo) const;
 
 private:
   /** Width of the display */

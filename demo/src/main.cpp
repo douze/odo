@@ -47,6 +47,6 @@ int main() {
   scene.attach_main_camera(std::make_shared<scene::Camera>(camera));
 
   // Run loop
-  renderer.prerun();
+  renderer.prepare();
   return renderer.run();
 }
