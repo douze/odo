@@ -7,8 +7,6 @@ namespace odo::mesh {
 
 struct TerrainVertex {
   float x, y;
-  float r, g, b;
-  float u, v;
 };
 
 /**
@@ -24,6 +22,9 @@ public:
   void render() const override;
 
   int instance_count = 1;
+  float patch_size = 1.0f;
+
+  float get_patch_size() const { return patch_size; }
 
 private:
   /** Noise texture */

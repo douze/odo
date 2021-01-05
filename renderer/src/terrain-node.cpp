@@ -41,5 +41,6 @@ void TerrainNode::render_ui() {
 
     odo::material::TerrainMaterial* tm = dynamic_cast<odo::material::TerrainMaterial*>(get_material_ptr());
     tm->grid_size = grid_size;
+    tm->patch_size = t->get_patch_size();
   }
 }

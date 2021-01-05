@@ -6,11 +6,8 @@
 using namespace odo::mesh;
 
 Terrain::Terrain() noexcept {
-  const float size = 1.0f;
-  const TerrainVertex vertices[4] = {{0.0f, 0.0f, 1.f, 0.f, 0.f, 0.0f, 0.0f},
-                                     {size, 0.0f, 0.f, 1.f, 0.f, 1.0f, 0.0f},
-                                     {size, size, 0.f, 0.f, 1.f, 1.0f, 1.0f},
-                                     {0.0f, size, 1.f, 1.f, 1.f, 0.0f, 1.0f}};
+  const float size = patch_size;
+  const TerrainVertex vertices[4] = {{0.0f, 0.0f}, {size, 0.0f}, {size, size}, {0.0f, size}};
 
   GLuint vbo;
   glCreateBuffers(1, &vbo);
@@ -23,14 +20,6 @@ Terrain::Terrain() noexcept {
   glEnableVertexArrayAttrib(vao, 0);
   glVertexArrayAttribFormat(vao, 0, 2, GL_FLOAT, GL_FALSE, 0);
   glVertexArrayAttribBinding(vao, 0, 0);
-
-  glEnableVertexArrayAttrib(vao, 1);
-  glVertexArrayAttribFormat(vao, 1, 3, GL_FLOAT, GL_FALSE, (sizeof(float) * 2));
-  glVertexArrayAttribBinding(vao, 1, 0);
-
-  glEnableVertexArrayAttrib(vao, 2);
-  glVertexArrayAttribFormat(vao, 2, 2, GL_FLOAT, GL_FALSE, (sizeof(float) * 5));
-  glVertexArrayAttribBinding(vao, 2, 0);
 }
 
 void Terrain::render() const {

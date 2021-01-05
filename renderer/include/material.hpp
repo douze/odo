@@ -42,13 +42,13 @@ public:
    * @brief Apply the transformation to the material.
    * @param transformation to apply
    */
-  void set_transformation_matrix(mesh::Transformation transformation) const;
+  virtual void set_transformation_matrix(mesh::Transformation transformation) const;
 
   /**
    * @brief Apply the camera matrices to the material.
    * @param camera to grab matrices from
    */
-  void set_camera_matrices(scene::Camera camera) const;
+  virtual void set_camera_matrices(scene::Camera camera) const;
 
   /**
    * @brief Render the material UI to the GUI frame.
@@ -60,10 +60,27 @@ public:
    */
   virtual void set_uniforms() const = 0;
 
+  /**
+   * @brief Set uniforms from parent material.
+   * @param parent_material to grab uniforms from
+   */
+  virtual void set_uniforms_from_parent(const Material& parent_material) const {}
+
+  /**
+   * @brief Prepare the material for offscreen rendering.
+   * @param width of the display
+   * @param height of the display
+   */
   virtual void prepare_offscreen(const int width, const int height) {}
 
+  /**
+   * @return the offscreen texture
+   */
   virtual GLuint get_offscreen_texture() const { return 0; }
 
+  /**
+   * @return the offscreen fbo
+   */
   virtual GLuint get_offscreen_fbo() const { return 0; }
 
 private:

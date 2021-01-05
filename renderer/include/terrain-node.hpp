@@ -18,7 +18,7 @@ private:
   void build_grid_size_list();
 
 private:
-  int grid_size_selection = 0;
+  int grid_size_selection = 5;
   std::vector<std::string> grid_size_list;
 };
 
