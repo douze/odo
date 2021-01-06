@@ -1,4 +1,0 @@
-#ifndef GUIPROVIDER_H
-#define GUIPROVIDER_H
-
-#endif // GUIPROVIDER_H

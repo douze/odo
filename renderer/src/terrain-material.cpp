@@ -12,14 +12,14 @@ TerrainMaterial::TerrainMaterial() noexcept
 void TerrainMaterial::render_ui() {
   ImGui::Checkbox("Wireframe", &use_wireframe);
   ImGui::SliderFloat("Height factor", &height_factor, 0.0f, 100.0f);
-  ImGui::SliderFloat("Scale XY", &scale_xy, 0.0f, 3.0f);
+  ImGui::SliderFloat("Scale XY", &patch_scale, 0.0f, 3.0f);
 }
 
 void TerrainMaterial::set_uniforms() const {
   glProgramUniform1ui(fs, 0, use_wireframe);
   glProgramUniform1f(tes, 0, height_factor);
   glProgramUniform1i(vs, 3, grid_size);
-  glProgramUniform1f(vs, 4, scale_xy);
+  glProgramUniform1f(vs, 4, patch_scale);
   glProgramUniform1f(vs, 5, patch_size);
 }
 

@@ -20,13 +20,13 @@ public:
   void set_camera_matrices(scene::Camera camera) const override;
   void set_transformation_matrix(mesh::Transformation transformation) const override;
 
-  int grid_size = 5;
-  float scale_xy = 1.0f;
+  int grid_size = 1;
+  float patch_scale = 1.0f;
   float patch_size = 1.0f;
 
 private:
   bool use_wireframe = false;
-  float height_factor = 5.0f;
+  float height_factor = 1.5f;
 };
 
 } // namespace odo::material

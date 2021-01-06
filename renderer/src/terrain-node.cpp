@@ -8,9 +8,10 @@
 using namespace odo::scene;
 
 TerrainNode::TerrainNode(const std::string& name, std::unique_ptr<mesh::Mesh> mesh,
-                         std::unique_ptr<material::Material> material, mesh::Transformation transformation)
+                         std::unique_ptr<material::Material> material, mesh::Transformation transformation) noexcept
     : Node{name, std::move(mesh), std::move(material), transformation} {
   build_grid_size_list();
+  update_node_properties();
 }
 
 void TerrainNode::build_grid_size_list() {
@@ -21,26 +22,31 @@ void TerrainNode::build_grid_size_list() {
   }
 }
 
+void TerrainNode::update_node_properties() {
+  const int grid_size = grid_size_selection_index + 1; // 0 indexed
+  get_terrain_mesh()->instance_count = grid_size * grid_size;
+  get_terrain_material()->grid_size = grid_size;
+  get_terrain_material()->patch_size = get_terrain_mesh()->get_patch_size();
+}
+
+odo::mesh::Terrain* TerrainNode::get_terrain_mesh() const { return dynamic_cast<odo::mesh::Terrain*>(get_mesh_ptr()); }
+
+odo::material::TerrainMaterial* TerrainNode::get_terrain_material() const {
+  return dynamic_cast<odo::material::TerrainMaterial*>(get_material_ptr());
+}
+
 void TerrainNode::render_ui() {
   if (ImGui::CollapsingHeader("Node: Terrain")) {
     ImGui::Combo(
-        "Size", &grid_size_selection,
+        "Size", &grid_size_selection_index,
         [](void* data, int idx, const char** out_text) {
           std::vector<std::string> from_data = *static_cast<std::vector<std::string>*>(data);
           *out_text = from_data[idx].c_str();
           return true;
         },
         static_cast<void*>(&grid_size_list), grid_size_list.size());
-    get_material().render_ui();
-    // get_mesh().render_ui();
-
-    const int grid_size = grid_size_selection + 1; // 0 indexed
-
-    odo::mesh::Terrain* t = dynamic_cast<odo::mesh::Terrain*>(get_mesh_ptr());
-    t->instance_count = grid_size * grid_size;
-
-    odo::material::TerrainMaterial* tm = dynamic_cast<odo::material::TerrainMaterial*>(get_material_ptr());
-    tm->grid_size = grid_size;
-    tm->patch_size = t->get_patch_size();
+    get_terrain_material()->render_ui();
+    get_terrain_mesh()->render_ui();
+    update_node_properties();
   }
 }

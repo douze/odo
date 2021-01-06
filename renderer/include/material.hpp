@@ -1,6 +1,7 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
+#include "gui-provider.hpp"
 #include <glad/glad.h>
 #include <string>
 
@@ -20,7 +21,7 @@ namespace material {
  * @brief Define the visual aspect of the mesh.
  * @note Must be derivated.
  */
-class Material {
+class Material : public odo::GuiProvider {
 public:
   /**
    * @brief Create a material from vertex & fragment shaders.
@@ -53,7 +54,7 @@ public:
   /**
    * @brief Render the material UI to the GUI frame.
    */
-  virtual void render_ui() = 0;
+  virtual void render_ui() override {}
 
   /**
    * @brief Set uniforms.

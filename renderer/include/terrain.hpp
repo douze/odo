@@ -22,13 +22,11 @@ public:
   void render() const override;
 
   int instance_count = 1;
-  float patch_size = 1.0f;
 
   float get_patch_size() const { return patch_size; }
 
 private:
-  /** Noise texture */
-  GLuint texture;
+  float patch_size = 1.0f;
 };
 
 } // namespace odo::mesh

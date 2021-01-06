@@ -69,18 +69,9 @@ public:
   virtual void render_offscreen();
 
   /**
-   * @return the node's mesh.
-   */
-  mesh::Mesh& get_mesh() const { return *mesh.get(); }
-
-  mesh::Mesh* get_mesh_ptr() const { return mesh.get(); }
-
-  /**
    * @return the node's material.
    */
   material::Material& get_material() const { return *material.get(); }
-
-  material::Material* get_material_ptr() const { return material.get(); }
 
   /**
    * @return the node's transformation.
@@ -113,8 +104,13 @@ public:
    */
   const std::string get_name() const { return name.value(); }
 
+protected:
+  mesh::Mesh* get_mesh_ptr() const { return mesh.get(); }
+
+  material::Material* get_material_ptr() const { return material.get(); }
+
 private:
-  /** Optional name of the node. Mainly used for GUI */
+  /** Optional name of the node. Mainly used for GUI. */
   std::optional<std::string> name;
 
   /** Mesh attached to the node. Can be null for transform only node. */
