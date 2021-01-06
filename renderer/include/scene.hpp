@@ -2,6 +2,7 @@
 #define SCENE_H
 
 #include "camera.hpp"
+#include "gui-provider.hpp"
 #include "material.hpp"
 #include "mesh.hpp"
 #include "transformation.hpp"
@@ -19,7 +20,7 @@ namespace scene {
  * @brief Scene node. A node contains a mesh.
  * @note Will contains a transform in a near future.
  */
-class Node {
+class Node : public odo::GuiProvider {
 public:
   /**
    * @brief Create a node without mesh.
@@ -42,16 +43,30 @@ public:
   void add_child(Node& child);
 
   /**
+   * @brief Prepare the node for rendering.
+   */
+  void prepare();
+
+  /**
    * @brief Prepare the node for offscreen rendering.
    * @param width of the display
    * @param height of the display
    */
   void prepare_offscreen(const int width, const int height);
 
+  void render_ui() override;
+
   /**
-   * @return the node's mesh.
+   * @brief Render the node.
+   * @param camera to render for
+   * @param parent of the node
    */
-  mesh::Mesh& get_mesh() const { return *mesh.get(); }
+  virtual void render(const Camera& camera, std::optional<std::reference_wrapper<scene::Node>> parent);
+
+  /**
+   * @brief Render the node, offscreen.
+   */
+  virtual void render_offscreen();
 
   /**
    * @return the node's material.
@@ -76,7 +91,7 @@ public:
   /**
    * @return true if the node has to be renderer offscreen.
    */
-  bool is_offscreen() const { return offscreen; }
+  bool is_offscreen_renderable() const { return offscreen; }
 
   /**
    * @return true if the node has a name.
@@ -89,8 +104,13 @@ public:
    */
   const std::string get_name() const { return name.value(); }
 
+protected:
+  mesh::Mesh* get_mesh_ptr() const { return mesh.get(); }
+
+  material::Material* get_material_ptr() const { return material.get(); }
+
 private:
-  /** Optional name of the node. Mainly used for GUI */
+  /** Optional name of the node. Mainly used for GUI. */
   std::optional<std::string> name;
 
   /** Mesh attached to the node. Can be null for transform only node. */

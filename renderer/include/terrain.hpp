@@ -7,7 +7,6 @@ namespace odo::mesh {
 
 struct TerrainVertex {
   float x, y;
-  float u, v;
 };
 
 /**
@@ -17,15 +16,17 @@ class Terrain : public Mesh {
 public:
   /**
    * @brief Create a terrain.
-   * @param path_size
    */
-  explicit Terrain(const int patch_size) noexcept;
+  explicit Terrain() noexcept;
 
   void render() const override;
 
+  int instance_count = 1;
+
+  float get_patch_size() const { return patch_size; }
+
 private:
-  /** Noise texture */
-  GLuint texture;
+  float patch_size = 1.0f;
 };
 
 } // namespace odo::mesh

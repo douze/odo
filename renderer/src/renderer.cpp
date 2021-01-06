@@ -155,7 +155,19 @@ void Renderer::process_keyboard(float delta_time) {
   }
 }
 
-void Renderer::prerun() { prepare_node(scene.get_root()); }
+void Renderer::prepare() { prepare_node(scene.get_root()); }
+
+void Renderer::prepare_node(scene::Node& node) const {
+  if (node.is_renderable()) {
+    node.prepare();
+  } else if (node.is_offscreen_renderable()) {
+    node.prepare_offscreen(width, height);
+  }
+
+  for (scene::Node& child : node.get_children()) {
+    prepare_node(child);
+  }
+}
 
 int Renderer::run() {
   set_render_state();
@@ -177,40 +189,17 @@ void Renderer::update_timer() {
   timer.last = current;
 }
 
-void Renderer::prepare_node(scene::Node& node) const {
-  if (node.is_renderable()) {
-    node.get_mesh().prepare();
-  } else if (node.is_offscreen()) {
-    node.prepare_offscreen(width, height);
-  }
-
-  for (scene::Node& child : node.get_children()) {
-    prepare_node(child);
-  }
-}
-
 void Renderer::render_node(scene::Node& node, std::optional<std::reference_wrapper<scene::Node>> parent) const {
   if (node.is_renderable()) {
-    material::Material& material = node.get_material();
-    material.use();
-    material.set_transformation_matrix(node.get_transformation());
-    material.set_camera_matrices(scene.get_main_camera());
-    material.set_uniforms();
-    if (parent.has_value()) {
-      glBindTextureUnit(0, parent.value().get().get_material().get_offscreen_texture());
-    }
-    node.get_mesh().render();
-  } else if (node.is_offscreen()) {
-    material::Material& material = node.get_material();
-    set_offscreen_render_state(material.get_offscreen_fbo(), material.get_offscreen_texture());
-    material.use();
-    material.set_uniforms();
-    node.get_mesh().render();
+    node.render(scene.get_main_camera(), parent);
+  } else if (node.is_offscreen_renderable()) {
+    set_offscreen_render_state(node.get_material().get_offscreen_fbo());
+    node.render_offscreen();
     set_render_state();
   }
 
   for (scene::Node& child : node.get_children()) {
-    render_node(child, /*std::nullopt */ std::make_optional<std::reference_wrapper<scene::Node>>(node));
+    render_node(child, std::make_optional<std::reference_wrapper<scene::Node>>(node));
   }
 }
 
@@ -223,13 +212,11 @@ void Renderer::set_render_state() const {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void Renderer::set_offscreen_render_state(GLuint fbo, GLuint texture) const {
+void Renderer::set_offscreen_render_state(GLuint fbo) const {
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   glViewport(0, 0, width, height);
   glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
   glBindFramebuffer(GL_FRAMEBUFFER, fbo);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glBindTexture(GL_TEXTURE_2D, texture);
-  glActiveTexture(GL_TEXTURE0);
 }

@@ -1,6 +1,7 @@
 #ifndef MESH_H
 #define MESH_H
 
+#include "gui-provider.hpp"
 #include <glad/glad.h>
 
 namespace odo::mesh {
@@ -8,7 +9,7 @@ namespace odo::mesh {
 /**
  * @brief Base class for 3D meshes.
  */
-class Mesh {
+class Mesh : public odo::GuiProvider {
 public:
   /**
    * @brief Prepare the mesh before the render loop.
@@ -23,7 +24,7 @@ public:
   /**
    * @brief Render the mesh UI to the GUI frame.
    */
-  virtual void render_ui() const {}
+  void render_ui() override {}
 
 protected:
   /** Vertex array object */

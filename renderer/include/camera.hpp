@@ -35,6 +35,8 @@ public:
    */
   glm::mat4 get_projection_matrix() const { return projection_matrix; }
 
+  glm::vec3 get_position() const { return position; }
+
   /**
    * @brief Move the camera along a direction.
    * @param direction to follow
