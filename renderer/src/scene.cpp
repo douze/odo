@@ -50,7 +50,7 @@ void Node::render(const Camera& camera, std::optional<std::reference_wrapper<sce
   mesh->render();
 }
 
-void Node::render_offscreen() {
+void Node::render_offscreen(const int width, const int height) {
   if (is_offscreen_renderable()) {
     material->use();
     material->set_uniforms();

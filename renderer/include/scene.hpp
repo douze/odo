@@ -56,6 +56,8 @@ public:
 
   void render_ui() override;
 
+  virtual void set_render_state(const int width, const int height) {}
+
   /**
    * @brief Render the node.
    * @param camera to render for
@@ -66,7 +68,7 @@ public:
   /**
    * @brief Render the node, offscreen.
    */
-  virtual void render_offscreen();
+  virtual void render_offscreen(const int width, const int height);
 
   /**
    * @return the node's material.

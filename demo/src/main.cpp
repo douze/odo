@@ -1,6 +1,7 @@
 #include "camera.hpp"
 #include "full-screen-quad.hpp"
 #include "noise-terrain-material.hpp"
+#include "noise-terrain-node.hpp"
 #include "renderer.hpp"
 #include "scene.hpp"
 #include "spdlog/spdlog.h"
@@ -27,18 +28,10 @@ int main() {
   scene::Scene& scene{renderer.get_scene()};
   scene::Node& root{scene.get_root()};
 
-  // Add full screen quad for noise
-  scene::Node noiseTerrainNode{"Material: Noise Terrain",
-                               std::make_unique<mesh::FullScreenQuad>(mesh::FullScreenQuad{}),
-                               std::make_unique<material::NoiseTerrainMaterial>(material::NoiseTerrainMaterial{}),
-                               mesh::Transformation{glm::vec3{0.0f}}, true};
-
-  // Add terrain
-  scene::TerrainNode terrainNode{"Mesh: Terrain", std::make_unique<mesh::Terrain>(mesh::Terrain{}),
-                                 std::make_unique<material::TerrainMaterial>(material::TerrainMaterial{}),
-                                 mesh::Transformation{glm::vec3{0.0f}, glm::vec3{-90.0f, 0.0f, 0.0f}, glm::vec3{1.0f}}};
+  // Setup scene
+  scene::NoiseTerrainNode noiseTerrainNode;
+  scene::TerrainNode terrainNode;
   noiseTerrainNode.add_child(terrainNode);
-
   root.add_child(noiseTerrainNode);
 
   // Assign main camera

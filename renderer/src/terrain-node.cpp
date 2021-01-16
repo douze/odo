@@ -7,9 +7,11 @@
 
 using namespace odo::scene;
 
-TerrainNode::TerrainNode(const std::string& name, std::unique_ptr<mesh::Mesh> mesh,
-                         std::unique_ptr<material::Material> material, mesh::Transformation transformation) noexcept
-    : Node{name, std::move(mesh), std::move(material), transformation} {
+TerrainNode::TerrainNode() noexcept
+    : Node{"Mesh: Terrain", std::make_unique<mesh::Terrain>(mesh::Terrain{}),
+           std::make_unique<material::TerrainMaterial>(material::TerrainMaterial{}),
+           mesh::Transformation{glm::vec3{0.0f}, glm::vec3{-90.0f, 0.0f, 0.0f}, glm::vec3{1.0f}}} {
+
   build_grid_size_list();
   update_node_properties();
 }

@@ -193,8 +193,8 @@ void Renderer::render_node(scene::Node& node, std::optional<std::reference_wrapp
   if (node.is_renderable()) {
     node.render(scene.get_main_camera(), parent);
   } else if (node.is_offscreen_renderable()) {
-    set_offscreen_render_state(node.get_material().get_offscreen_fbo());
-    node.render_offscreen();
+    // set_offscreen_render_state(node.get_material().get_offscreen_fbo());
+    node.render_offscreen(width, height);
     set_render_state();
   }
 

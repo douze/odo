@@ -22,8 +22,7 @@ namespace scene {
 class TerrainNode : public Node {
 
 public:
-  explicit TerrainNode(const std::string& name, std::unique_ptr<mesh::Mesh> mesh,
-                       std::unique_ptr<material::Material> material, mesh::Transformation transformation) noexcept;
+  explicit TerrainNode() noexcept;
 
   void render_ui() override;
 
