@@ -107,12 +107,6 @@ private:
    */
   void set_render_state() const;
 
-  /**
-   * @brief Set state for offscreen rendering.
-   * @param fbo to render to
-   */
-  void set_offscreen_render_state(GLuint fbo) const;
-
 private:
   /** Width of the display */
   int width;

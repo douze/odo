@@ -4,15 +4,17 @@
 
 using namespace odo::scene;
 
-Camera::Camera(const glm::vec3& position, const glm::vec2& orientation, float aspect) noexcept
+Camera::Camera(const glm::vec3& position, const glm::vec2& orientation, const int width, const int height) noexcept
     : position{position},
       front{glm::vec3{0.0f, 0.0f, -1.0f}},
       up{glm::vec3{0.0f, 1.0f, 0.0f}},
       right{glm::vec3{1.0f, 0.0f, 0.0f}},
       yaw{orientation.x},
       pitch{orientation.y},
-      projection_matrix{glm::perspective(45.0f, aspect, 0.1f, 500.0f)},
-      dirty{true} {
+      projection_matrix{glm::perspective(45.0f, width / static_cast<float>(height), 0.1f, 500.0f)},
+      dirty{true},
+      window_width{width},
+      window_height{height} {
   update_vectors();
 }
 

@@ -1,5 +1,6 @@
 #include "terrain-material.hpp"
 #include "camera.hpp"
+#include "noise-terrain-material.hpp"
 #include "transformation.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
@@ -24,7 +25,8 @@ void TerrainMaterial::set_uniforms() const {
 }
 
 void TerrainMaterial::set_uniforms_from_parent(const Material& parent_material) const {
-  glBindTextureUnit(0, parent_material.get_offscreen_texture());
+  const NoiseTerrainMaterial& noise_terrain_material = dynamic_cast<const NoiseTerrainMaterial&>(parent_material);
+  glBindTextureUnit(0, noise_terrain_material.get_offscreen_texture());
 }
 
 void TerrainMaterial::set_camera_matrices(scene::Camera camera) const {

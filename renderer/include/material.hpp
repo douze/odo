@@ -52,11 +52,6 @@ public:
   virtual void set_camera_matrices(scene::Camera camera) const;
 
   /**
-   * @brief Render the material UI to the GUI frame.
-   */
-  virtual void render_ui() override {}
-
-  /**
    * @brief Set uniforms.
    */
   virtual void set_uniforms() const = 0;
@@ -72,17 +67,12 @@ public:
    * @param width of the display
    * @param height of the display
    */
-  virtual void prepare_offscreen(const int width, const int height) {}
+  virtual void prepare(const int width, const int height) {}
 
   /**
-   * @return the offscreen texture
+   * @brief Render the material UI to the GUI frame.
    */
-  virtual GLuint get_offscreen_texture() const { return 0; }
-
-  /**
-   * @return the offscreen fbo
-   */
-  virtual GLuint get_offscreen_fbo() const { return 0; }
+  virtual void render_ui() override {}
 
 private:
   /**

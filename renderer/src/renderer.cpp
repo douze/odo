@@ -159,9 +159,7 @@ void Renderer::prepare() { prepare_node(scene.get_root()); }
 
 void Renderer::prepare_node(scene::Node& node) const {
   if (node.is_renderable()) {
-    node.prepare();
-  } else if (node.is_offscreen_renderable()) {
-    node.prepare_offscreen(width, height);
+    node.prepare(width, height);
   }
 
   for (scene::Node& child : node.get_children()) {
@@ -191,11 +189,10 @@ void Renderer::update_timer() {
 
 void Renderer::render_node(scene::Node& node, std::optional<std::reference_wrapper<scene::Node>> parent) const {
   if (node.is_renderable()) {
-    node.render(scene.get_main_camera(), parent);
-  } else if (node.is_offscreen_renderable()) {
-    // set_offscreen_render_state(node.get_material().get_offscreen_fbo());
-    node.render_offscreen(width, height);
-    set_render_state();
+    const bool rendered = node.render(scene.get_main_camera(), parent);
+    if (rendered && node.should_restore_render_state()) {
+      set_render_state();
+    }
   }
 
   for (scene::Node& child : node.get_children()) {
@@ -209,14 +206,5 @@ void Renderer::set_render_state() const {
   glViewport(0, 0, width, height);
   glClearColor(0.5, 1.0, 0.5, 1.0);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
-
-void Renderer::set_offscreen_render_state(GLuint fbo) const {
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_CULL_FACE);
-  glViewport(0, 0, width, height);
-  glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
-  glBindFramebuffer(GL_FRAMEBUFFER, fbo);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

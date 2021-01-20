@@ -14,11 +14,24 @@ class NoiseTerrainMaterial;
 }
 
 namespace scene {
+/**
+ * @brief Specification of Node used for the terrain noise.
+ */
 class NoiseTerrainNode : public Node {
 public:
   explicit NoiseTerrainNode() noexcept;
 
-  void render_offscreen(const int width, const int height) override;
+  /**
+   * @return true because we affected the render state when rendering this node.
+   */
+  bool should_restore_render_state() const override { return true; }
+
+  /**
+   * @return the terrain noise material.
+   */
+  material::NoiseTerrainMaterial* get_noise_terrain_material() const;
+
+  int render(const Camera& camera, std::optional<std::reference_wrapper<scene::Node>> parent) override;
 
   void set_render_state(const int width, const int height) override;
 

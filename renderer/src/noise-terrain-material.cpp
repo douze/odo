@@ -5,7 +5,7 @@ using namespace odo::material;
 
 NoiseTerrainMaterial::NoiseTerrainMaterial() noexcept : Material{"noise-terrain.vs.glsl", "noise-terrain.fs.glsl"} {}
 
-void NoiseTerrainMaterial::prepare_offscreen(const int width, const int height) {
+void NoiseTerrainMaterial::prepare(const int width, const int height) {
   // FBO
   glCreateFramebuffers(1, &fbo);
 

@@ -35,8 +35,8 @@ int main() {
   root.add_child(noiseTerrainNode);
 
   // Assign main camera
-  scene::Camera camera{glm::vec3{1.0f, 3.0f, 3.0f}, glm::vec2{-90.0f, -45.0f},
-                       configuration.width / static_cast<float>(configuration.height)};
+  scene::Camera camera{glm::vec3{1.0f, 3.0f, 3.0f}, glm::vec2{-90.0f, -45.0f}, configuration.width,
+                       configuration.height};
   scene.attach_main_camera(std::make_shared<scene::Camera>(camera));
 
   // Run loop

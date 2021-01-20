@@ -23,7 +23,7 @@ public:
    * @param ortientation of the camera
    * @param aspect for pespective projection
    */
-  explicit Camera(const glm::vec3& position, const glm::vec2& orientation, float aspect) noexcept;
+  explicit Camera(const glm::vec3& position, const glm::vec2& orientation, const int width, const int height) noexcept;
 
   /**
    * @return the view matrix.
@@ -55,6 +55,16 @@ public:
    * @brief Render camera UI to GUI frame.
    */
   void render_ui() const;
+
+  /**
+   * @return the window width.
+   */
+  int get_window_width() const { return window_width; }
+
+  /**
+   * @return the window height.
+   */
+  int get_window_height() const { return window_height; }
 
 private:
   /**
@@ -89,6 +99,10 @@ private:
 
   /** True if recompute of view matrix is needed */
   bool dirty;
+
+  int window_width;
+
+  int window_height;
 
   friend class odo::Gui;
 };

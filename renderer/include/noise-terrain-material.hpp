@@ -12,15 +12,21 @@ class NoiseTerrainMaterial : public Material {
 public:
   explicit NoiseTerrainMaterial() noexcept;
 
+  /**
+   * @return the offscreen texture
+   */
+  GLuint get_offscreen_texture() const { return texture; }
+
+  /**
+   * @return the offscreen fbo
+   */
+  GLuint get_offscreen_fbo() const { return fbo; }
+
   void render_ui() override;
 
   void set_uniforms() const override;
 
-  void prepare_offscreen(const int width, const int height) override;
-
-  GLuint get_offscreen_texture() const override { return texture; }
-
-  GLuint get_offscreen_fbo() const override { return fbo; }
+  void prepare(const int width, const int height) override;
 
 private:
   GLuint fbo;

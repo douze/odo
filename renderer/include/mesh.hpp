@@ -21,9 +21,6 @@ public:
    */
   virtual void render() const = 0;
 
-  /**
-   * @brief Render the mesh UI to the GUI frame.
-   */
   void render_ui() override {}
 
 protected:
