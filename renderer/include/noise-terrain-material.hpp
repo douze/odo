@@ -28,9 +28,20 @@ public:
 
   void prepare(const int width, const int height) override;
 
+  bool is_dirty() const { return dirty; }
+  void set_dirty(bool dirty) { this->dirty = dirty; }
+
+private:
+  void add_combo(const char* label, int* current_item, const char* items_separated_by_zeros);
+  void add_checkbox(const char* label, bool* v);
+  void add_input_scalar(const char* label, void* p_data, const void* p_step);
+  void add_slider_int(const char* label, int* v, int v_min, int v_max);
+
 private:
   GLuint fbo;
   GLuint texture;
+
+  bool dirty = true;
 
   bool use_demo_value = true;
   int noise_function = 3;

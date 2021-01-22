@@ -19,8 +19,8 @@ void NoiseTerrainNode::set_render_state(const int width, const int height) {
 }
 
 int NoiseTerrainNode::render(const Camera& camera, std::optional<std::reference_wrapper<scene::Node>> parent) {
-  if (dirty) {
-    dirty = false;
+  if (get_noise_terrain_material().is_dirty()) {
+    get_noise_terrain_material().set_dirty(false);
 
     set_render_state(camera.get_window_width(), camera.get_window_height());
 

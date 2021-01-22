@@ -18,49 +18,73 @@ void NoiseTerrainMaterial::prepare(const int width, const int height) {
   glNamedFramebufferTexture(fbo, GL_COLOR_ATTACHMENT0, texture, 0);
 }
 
+void NoiseTerrainMaterial::add_combo(const char* label, int* current_item, const char* items_separated_by_zeros) {
+  if (ImGui::Combo(label, current_item, items_separated_by_zeros)) {
+    dirty = true;
+  }
+}
+
+void NoiseTerrainMaterial::add_checkbox(const char* label, bool* v) {
+  if (ImGui::Checkbox(label, v)) {
+    dirty = true;
+  }
+}
+
+void NoiseTerrainMaterial::add_input_scalar(const char* label, void* p_data, const void* p_step) {
+  if (ImGui::InputScalar(label, ImGuiDataType_Float, p_data, p_step)) {
+    dirty = true;
+  }
+}
+
+void NoiseTerrainMaterial::add_slider_int(const char* label, int* v, int v_min, int v_max) {
+  if (ImGui::SliderInt(label, v, v_min, v_max)) {
+    dirty = true;
+  }
+}
+
 void NoiseTerrainMaterial::render_ui() {
-  ImGui::Combo("Noise function", &noise_function, "Simplex\0Billow\0Ridged\0Heightmap\0\0");
-  ImGui::Checkbox("Use demo value", &use_demo_value);
+  add_combo("Noise function", &noise_function, "Simplex\0Billow\0Ridged\0Heightmap\0\0");
+  add_checkbox("Use demo value", &use_demo_value);
 
   float step = 0.1f;
   ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
   if (ImGui::BeginTabBar("NoiseTabs", tab_bar_flags)) {
     if (ImGui::BeginTabItem("Simplex")) {
-      ImGui::SliderInt("Octaves##fbm", &fbm_octaves, 1.0f, 8.0f);
+      add_slider_int("Octaves##fbm", &fbm_octaves, 1.0f, 8.0f);
       ImGui::PushItemWidth(120);
-      ImGui::InputScalar("Amplitude##fbm", ImGuiDataType_Float, &fbm_amplitude_persistence[0], &step);
+      add_input_scalar("Amplitude##fbm", &fbm_amplitude_persistence[0], &step);
       ImGui::SameLine();
-      ImGui::InputScalar("Persistency##fbm", ImGuiDataType_Float, &fbm_amplitude_persistence[1], &step);
-      ImGui::InputScalar("Frequency##fbm", ImGuiDataType_Float, &fbm_frequency_lacunarity[0], &step);
+      add_input_scalar("Persistency##fbm", &fbm_amplitude_persistence[1], &step);
+      add_input_scalar("Frequency##fbm", &fbm_frequency_lacunarity[0], &step);
       ImGui::SameLine();
-      ImGui::InputScalar("Lacunarity##fbm", ImGuiDataType_Float, &fbm_frequency_lacunarity[1], &step);
+      add_input_scalar("Lacunarity##fbm", &fbm_frequency_lacunarity[1], &step);
       ImGui::PopItemWidth();
       ImGui::EndTabItem();
     }
     if (ImGui::BeginTabItem("Billow")) {
-      ImGui::SliderInt("Octaves##billow", &billow_octaves, 1.0f, 8.0f);
+      add_slider_int("Octaves##billow", &billow_octaves, 1.0f, 8.0f);
       ImGui::PushItemWidth(120);
-      ImGui::InputScalar("Amplitude##billow", ImGuiDataType_Float, &billow_amplitude_persistence[0], &step);
+      add_input_scalar("Amplitude##billow", &billow_amplitude_persistence[0], &step);
       ImGui::SameLine();
-      ImGui::InputScalar("Persistency##billow", ImGuiDataType_Float, &billow_amplitude_persistence[1], &step);
-      ImGui::InputScalar("Frequency##billow", ImGuiDataType_Float, &billow_frequency_lacunarity[0], &step);
+      add_input_scalar("Persistency##billow", &billow_amplitude_persistence[1], &step);
+      add_input_scalar("Frequency##billow", &billow_frequency_lacunarity[0], &step);
       ImGui::SameLine();
-      ImGui::InputScalar("Lacunarity##billow", ImGuiDataType_Float, &billow_frequency_lacunarity[1], &step);
+      add_input_scalar("Lacunarity##billow", &billow_frequency_lacunarity[1], &step);
       ImGui::PopItemWidth();
       ImGui::EndTabItem();
     }
     if (ImGui::BeginTabItem("Ridged Multi")) {
-      ImGui::SliderInt("Octaves##rmf", &rmf_octaves, 1.0f, 8.0f);
+      add_slider_int("Octaves##rmf", &rmf_octaves, 1.0f, 8.0f);
       ImGui::PushItemWidth(120);
-      ImGui::InputScalar("Amplitude##rmf", ImGuiDataType_Float, &rmf_amplitude_persistence[0], &step);
+      add_input_scalar("Amplitude##rmf", &rmf_amplitude_persistence[0], &step);
       ImGui::SameLine();
-      ImGui::InputScalar("Persistency##rmf", ImGuiDataType_Float, &rmf_amplitude_persistence[1], &step);
-      ImGui::InputScalar("Frequency##rmf", ImGuiDataType_Float, &rmf_frequency_lacunarity[0], &step);
+      add_input_scalar("Persistency##rmf", &rmf_amplitude_persistence[1], &step);
+      add_input_scalar("Frequency##rmf", &rmf_frequency_lacunarity[0], &step);
       ImGui::SameLine();
-      ImGui::InputScalar("Lacunarity##rmf", ImGuiDataType_Float, &rmf_frequency_lacunarity[1], &step);
-      ImGui::InputScalar("H##rmf", ImGuiDataType_Float, &rmf_h_offset[0], &step);
+      add_input_scalar("Lacunarity##rmf", &rmf_frequency_lacunarity[1], &step);
+      add_input_scalar("H##rmf", &rmf_h_offset[0], &step);
       ImGui::SameLine();
-      ImGui::InputScalar("Offset##rmf", ImGuiDataType_Float, &rmf_h_offset[1], &step);
+      add_input_scalar("Offset##rmf", &rmf_h_offset[1], &step);
       ImGui::PopItemWidth();
       ImGui::EndTabItem();
     }
