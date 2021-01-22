@@ -64,6 +64,11 @@ public:
   material::Material& get_material() const { return *material.get(); }
 
   /**
+   * @return the node's mesh.
+   */
+  mesh::Mesh& get_mesh() const { return *mesh.get(); }
+
+  /**
    * @return the node's transformation.
    */
   mesh::Transformation get_transformation() const { return transformation; }
@@ -96,11 +101,6 @@ public:
   virtual bool should_restore_render_state() const { return false; }
 
   void render_ui() override;
-
-protected:
-  mesh::Mesh* get_mesh_ptr() const { return mesh.get(); }
-
-  material::Material* get_material_ptr() const { return material.get(); }
 
 private:
   /** Optional name of the node. Mainly used for GUI. */

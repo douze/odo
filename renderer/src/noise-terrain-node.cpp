@@ -14,7 +14,7 @@ void NoiseTerrainNode::set_render_state(const int width, const int height) {
   glEnable(GL_CULL_FACE);
   glViewport(0, 0, width, height);
   glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
-  glBindFramebuffer(GL_FRAMEBUFFER, get_noise_terrain_material()->get_offscreen_fbo());
+  glBindFramebuffer(GL_FRAMEBUFFER, get_noise_terrain_material().get_offscreen_fbo());
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -24,14 +24,14 @@ int NoiseTerrainNode::render(const Camera& camera, std::optional<std::reference_
 
     set_render_state(camera.get_window_width(), camera.get_window_height());
 
-    get_material_ptr()->use();
-    get_material_ptr()->set_uniforms();
-    get_mesh_ptr()->render();
+    get_material().use();
+    get_material().set_uniforms();
+    get_mesh().render();
     return true;
   }
   return false;
 }
 
-odo::material::NoiseTerrainMaterial* NoiseTerrainNode::get_noise_terrain_material() const {
-  return dynamic_cast<odo::material::NoiseTerrainMaterial*>(get_material_ptr());
+odo::material::NoiseTerrainMaterial& NoiseTerrainNode::get_noise_terrain_material() const {
+  return dynamic_cast<odo::material::NoiseTerrainMaterial&>(get_material());
 }

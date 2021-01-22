@@ -29,7 +29,7 @@ public:
   /**
    * @return the terrain noise material.
    */
-  material::NoiseTerrainMaterial* get_noise_terrain_material() const;
+  material::NoiseTerrainMaterial& get_noise_terrain_material() const;
 
   int render(const Camera& camera, std::optional<std::reference_wrapper<scene::Node>> parent) override;
 

@@ -41,12 +41,12 @@ private:
   /**
    * @return the terrain mesh.
    */
-  mesh::Terrain* get_terrain_mesh() const;
+  mesh::Terrain& get_terrain_mesh() const;
 
   /**
    * @return the terrain material.
    */
-  material::TerrainMaterial* get_terrain_material() const;
+  material::TerrainMaterial& get_terrain_material() const;
 
 private:
   /** The default index of the selection of grid size. Indexed from 0. */
