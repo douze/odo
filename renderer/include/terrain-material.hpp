@@ -27,6 +27,14 @@ public:
 private:
   bool use_wireframe = false;
   float height_factor = 1.5f;
+  float snow_height = 0.35;
+  float grass_height = 0.15;
+  float mix_area_width = 0.1;
+
+  GLuint grass_texture;
+  GLuint ground_texture;
+  GLuint rock_texture;
+  GLuint snow_texture;
 };
 
 } // namespace odo::material

@@ -4,6 +4,9 @@
 #include "transformation.hpp"
 #include <fstream>
 #include <glm/gtc/type_ptr.hpp>
+//#define STB_ONLY_JPEG
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 using namespace odo::material;
 
@@ -85,4 +88,31 @@ void Material::set_transformation_matrix(mesh::Transformation transformation) co
 void Material::set_camera_matrices(scene::Camera camera) const {
   glProgramUniformMatrix4fv(vs, 1, 1, GL_FALSE, glm::value_ptr(camera.get_view_matrix()));
   glProgramUniformMatrix4fv(vs, 2, 1, GL_FALSE, glm::value_ptr(camera.get_projection_matrix()));
+}
+
+unsigned char* Material::read_texture_file(const std::string& path, int& width, int& height, int& image_components) {
+  const std::string filename{TEXTURE_FOLDER + path};
+  return stbi_load(filename.c_str(), &width, &height, &image_components, 0);
+}
+
+GLuint Material::create_texture(const std::string& path, GLint wrap_s, GLint wrap_t, GLint min_filter,
+                                GLint mag_filter) {
+  int width = 0;
+  int height = 0;
+  int image_components = 0;
+  unsigned char* data = read_texture_file(path, width, height, image_components);
+
+  GLuint texture;
+  glCreateTextures(GL_TEXTURE_2D, 1, &texture);
+  glTextureParameteri(texture, GL_TEXTURE_WRAP_S, wrap_s);
+  glTextureParameteri(texture, GL_TEXTURE_WRAP_T, wrap_t);
+  glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, min_filter);
+  glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, mag_filter);
+
+  glTextureStorage2D(texture, 1, GL_RGB8, width, height);
+  if (data) {
+    glTextureSubImage2D(texture, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
+  }
+  stbi_image_free(data);
+  return texture;
 }

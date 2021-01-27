@@ -74,6 +74,9 @@ public:
    */
   virtual void render_ui() override {}
 
+protected:
+  GLuint create_texture(const std::string& path, GLint wrap_s, GLint wrap_t, GLint min_filter, GLint mag_filter);
+
 private:
   /**
    * @param path of the shader file
@@ -103,9 +106,20 @@ private:
   void check_link_status(GLuint program, const std::string& path) const;
 
   /**
+   * @param path of the texture file
+   * @return the content of the texture file.
+   */
+  static unsigned char* read_texture_file(const std::string& path, int& width, int& height, int& image_components);
+
+  /**
    * @brief Shaders location.
    */
   inline static const std::string SHADER_FOLDER{"resources/shaders/"};
+
+  /**
+   * @brief Textures location.
+   */
+  inline static const std::string TEXTURE_FOLDER{"resources/textures/"};
 
 private:
   /** Program pipeline */

@@ -5,7 +5,7 @@
 using namespace odo::scene;
 
 NoiseTerrainNode::NoiseTerrainNode() noexcept
-    : Node{"Material: Noise Terrain", std::make_unique<mesh::FullScreenQuad>(mesh::FullScreenQuad{}),
+    : Node{"Noise Terrain", std::make_unique<mesh::FullScreenQuad>(mesh::FullScreenQuad{}),
            std::make_unique<material::NoiseTerrainMaterial>(material::NoiseTerrainMaterial{}),
            mesh::Transformation{glm::vec3{0.0f}}} {}
 

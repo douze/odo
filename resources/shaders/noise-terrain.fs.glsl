@@ -25,7 +25,9 @@ layout (location = 12) uniform int noise_function;
 
 out vec4 color;
 
-// Simplex noise
+/**
+ * @brief Fractal Brownian Motion noise.
+ */
 float fbm (vec2 xy, int octaves, float amplitude, float persistence, float frequency, float lacunarity) {
     float value = 0.0;
     for (int i = 0; i < octaves; i++) {
@@ -36,7 +38,9 @@ float fbm (vec2 xy, int octaves, float amplitude, float persistence, float frequ
     return value;
 }
 
-// Billowy noise
+/**
+ * @brief Billowy noise.
+ */
 float billow (vec2 xy, int octaves, float amplitude, float persistence, float frequency, float lacunarity) {
     float value = 0.0;
     for (int i = 0; i < octaves; i++) {
@@ -47,7 +51,9 @@ float billow (vec2 xy, int octaves, float amplitude, float persistence, float fr
     return value + 0.5;
 }
 
-// Ridged multi fractal noise
+/**
+ * @brief Ridged Multi Fractal noise.
+ */
 float rmf (vec2 xy, int octaves, float amplitude, float persistence, float frequency, float lacunarity,
            float h, float offset) {
     float value = 0.0;
@@ -72,29 +78,31 @@ float rmf (vec2 xy, int octaves, float amplitude, float persistence, float frequ
     return (value * 1.25) - 1.0;
 }
 
-void main() {
-  float v = 0.0f;
+/**
+ * @brief Compute the height of the xy position.
+ * @note Result depends on noise_function selection.
+ */
+float compute_height(vec2 xy) {
   if (noise_function == 0) {
-   v = fbm(fs_in.uv, fbm_octaves, fbm_amplitude_persistence[0], fbm_amplitude_persistence[1],
+    return fbm(xy, fbm_octaves, fbm_amplitude_persistence[0], fbm_amplitude_persistence[1],
         fbm_frequency_lacunarity[0], fbm_frequency_lacunarity[1]);
   }
   if (noise_function == 1){
-    v = billow(fs_in.uv, billow_octaves, billow_amplitude_persistence[0], billow_amplitude_persistence[1],
+    return billow(xy, billow_octaves, billow_amplitude_persistence[0], billow_amplitude_persistence[1],
         billow_frequency_lacunarity[0], billow_frequency_lacunarity[1]);
   }
   if (noise_function == 2) {
-    v = rmf(fs_in.uv, rmf_octaves, rmf_amplitude_persistence[0], rmf_amplitude_persistence[1],
+    return rmf(xy, rmf_octaves, rmf_amplitude_persistence[0], rmf_amplitude_persistence[1],
         rmf_frequency_lacunarity[0], rmf_frequency_lacunarity[1], rmf_h_offset[0], rmf_h_offset[1]);
   }
   if (noise_function == 3) {
-    vec2 xy = fs_in.uv;
     if (use_demo_value) {
       float mountain_terrain = rmf(xy, 6, 1.0, 0.5, 1.0, 2.0, 1.0, 1.0);
       float base_flat_terrain = billow(xy, 6, 1.0, 0.5, 2.0, 2.0);
       float flat_terrain = base_flat_terrain  * 0.125 - 0.75;
       float terrain_type = fbm(xy, 6, 1.0, 0.25, 0.5, 2.0);
       float final_terrain = mix(flat_terrain, mountain_terrain, smoothstep(0.0, 1.0, terrain_type));
-      v = final_terrain;
+      return final_terrain;
     } else {
       float mountain_terrain = rmf(xy, rmf_octaves, rmf_amplitude_persistence[0], rmf_amplitude_persistence[1],
           rmf_frequency_lacunarity[0], rmf_frequency_lacunarity[1], rmf_h_offset[0], rmf_h_offset[1]);
@@ -104,9 +112,26 @@ void main() {
       float terrain_type = fbm(xy, fbm_octaves, fbm_amplitude_persistence[0], fbm_amplitude_persistence[1],
           fbm_frequency_lacunarity[0], fbm_frequency_lacunarity[1]);
       float final_terrain = mix(flat_terrain, mountain_terrain, smoothstep(0.0, 1.0, terrain_type));
-      v = final_terrain;
+      return final_terrain;
     }
-    v = v*0.5 + 0.5;
   }
-  color = vec4(v,v,v,1.0);
+}
+
+/**
+ * @brief Compute the analytic normals of the xy position.
+ */
+vec3 compute_normal(vec2 uv) {
+  vec3 offset = vec3(1.0/1280.0, 1.0/800.0, 0.0); // TODO uniforms
+  float height_left = compute_height(fs_in.uv - offset.xz);
+  float height_right = compute_height(fs_in.uv + offset.xz);
+  float height_down = compute_height(fs_in.uv - offset.zy);
+  float height_up = compute_height(fs_in.uv + offset.zy);
+  return normalize(vec3(height_left - height_right, height_down - height_up, 0));
+}
+
+void main() {
+  float height = compute_height(fs_in.uv);
+  height = height*0.5 + 0.5;
+  vec3 normal = compute_normal(fs_in.uv);
+  color = vec4(height, normal);
 };

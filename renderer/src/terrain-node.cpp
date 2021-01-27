@@ -8,7 +8,7 @@
 using namespace odo::scene;
 
 TerrainNode::TerrainNode() noexcept
-    : Node{"Mesh: Terrain", std::make_unique<mesh::Terrain>(mesh::Terrain{}),
+    : Node{"Terrain", std::make_unique<mesh::Terrain>(mesh::Terrain{}),
            std::make_unique<material::TerrainMaterial>(material::TerrainMaterial{}),
            mesh::Transformation{glm::vec3{0.0f}, glm::vec3{-90.0f, 0.0f, 0.0f}, glm::vec3{1.0f}}} {
 
@@ -38,7 +38,7 @@ odo::material::TerrainMaterial& TerrainNode::get_terrain_material() const {
 }
 
 void TerrainNode::render_ui() {
-  if (ImGui::CollapsingHeader("Node: Terrain")) {
+  if (ImGui::CollapsingHeader(get_name().c_str())) {
     ImGui::Combo(
         "Size", &grid_size_selection_index,
         [](void* data, int idx, const char** out_text) {
