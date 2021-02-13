@@ -3,7 +3,7 @@ glfw/3.3.2
 glad/0.1.33
 glm/0.9.9.8
 spdlog/1.7.0
-imgui/1.79
+imgui/1.82
 
 [generators]
 cmake

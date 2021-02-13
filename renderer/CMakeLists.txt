@@ -43,7 +43,8 @@ target_sources(renderer
       "include/gui-provider.hpp"
       "include/terrain-node.hpp"
       "include/noise-terrain-node.hpp"
-      "include/stb_image.h")
+      "include/stb_image.h"
+      "include/stb_image_write.h")
 target_include_directories(renderer
 	PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 target_link_libraries(renderer ${CONAN_LIBS})

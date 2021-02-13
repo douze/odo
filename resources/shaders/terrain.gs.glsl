@@ -5,10 +5,12 @@ layout(triangle_strip, max_vertices = 3) out;
 
 in TES_OUT {
   vec2 uv;
+  vec3 position;
 } gs_in[];
 
 out GS_OUT {
   vec2 uv;
+  vec3 position;
   vec3 wireframe_weight;
 } gs_out;
 
@@ -17,6 +19,7 @@ void main(void) {
     gl_Position = gl_in[i].gl_Position;
 
     gs_out.uv = gs_in[i].uv;
+    gs_out.position = gs_in[i].position;
     gs_out.wireframe_weight = vec3(0.0);
     gs_out.wireframe_weight[i] = 1.0;
 

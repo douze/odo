@@ -43,7 +43,7 @@ private:
 
   bool dirty = true;
 
-  bool use_demo_value = true;
+  bool use_demo_value = false;
   int noise_function = 3;
 
   int fbm_octaves = 6;
@@ -58,6 +58,8 @@ private:
   float rmf_amplitude_persistence[2] = {1.0f, 2.0f};
   float rmf_frequency_lacunarity[2] = {1.0f, 2.0f};
   float rmf_h_offset[2] = {1.0f, 1.0f};
+
+  int normal_type = 0;
 };
 
 } // namespace odo::material

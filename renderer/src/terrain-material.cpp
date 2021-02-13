@@ -19,18 +19,76 @@ TerrainMaterial::TerrainMaterial() noexcept
 void TerrainMaterial::render_ui() {
   ImGui::Checkbox("Wireframe", &use_wireframe);
   ImGui::SliderFloat("Height factor", &height_factor, 0.0f, 100.0f);
-  ImGui::SliderFloat("Snow height", &snow_height, 0.0f, 1.0f);
-  ImGui::SliderFloat("Grass height", &grass_height, 0.0f, 1.0f);
-  ImGui::SliderFloat("Mix area width", &mix_area_width, 0.0f, 1.0f);
   ImGui::SliderFloat("Scale XY", &patch_scale, 0.0f, 3.0f);
+  ImGui::SliderFloat("Mix area width", &mix_area_width, 0.0f, 1.0f);
+
+  if (ImGui::BeginTable("Textures", 3, ImGuiTableFlags_Borders)) {
+    ImGui::TableSetupColumn("Snow");
+    ImGui::TableSetupColumn("Ground");
+    ImGui::TableSetupColumn("Grass");
+    ImGui::TableHeadersRow();
+
+    ImGui::TableNextColumn();
+    ImGui::SliderFloat("Height##snow", &snow_height, 0.0f, 1.0f);
+    ImGui::SliderFloat("UV##snow", &snow_uv, 0.0f, 200.0f);
+
+    ImGui::Text("Rock");
+    ImGui::SliderFloat("Edge 0##snow", &edge0_rock_snow, 0.0f, 1.0f);
+    ImGui::SliderFloat("Edge 1##snow", &edge1_rock_snow, 0.0f, 1.0f);
+    ImGui::SliderFloat("UV##snow", &rock_uv, 0.0f, 200.0f);
+
+    ImGui::TableNextColumn();
+    ImGui::SliderFloat("Height##ground", &ground_height, 0.0f, 1.0f);
+    ImGui::SliderFloat("UV##ground", &ground_uv, 0.0f, 200.0f);
+
+    ImGui::Text("Rock");
+    ImGui::SliderFloat("Edge 0##ground", &edge0_rock_ground, 0.0f, 1.0f);
+    ImGui::SliderFloat("Edge 1##ground", &edge1_rock_ground, 0.0f, 1.0f);
+    ImGui::SliderFloat("UV##ground", &rock_uv, 0.0f, 200.0f);
+
+    ImGui::TableNextColumn();
+    ImGui::SliderFloat("UV##grass", &grass_uv, 0.0f, 200.0f);
+
+    ImGui::EndTable();
+  }
+
+  ImGui::Text("Albedo");
+  ImGui::RadioButton("HeightMap", &display_type, 0);
+  ImGui::RadioButton("NormalMap", &display_type, 1);
+  ImGui::RadioButton("ColorMap", &display_type, 2);
+
+  ImGui::Text("Light");
+  ImGui::SliderFloat("Light X", &light_position[0], 0.0f, 1.0f);
+  ImGui::SliderFloat("Light Y", &light_position[1], 0.0f, 2.0f);
+  ImGui::SliderFloat("Light Z", &light_position[2], 0.0f, 3.0f);
 }
 
 void TerrainMaterial::set_uniforms() const {
   glProgramUniform1ui(fs, 0, use_wireframe);
   glProgramUniform1f(fs, 1, snow_height);
-  glProgramUniform1f(fs, 2, grass_height);
+  glProgramUniform1f(fs, 2, ground_height);
   glProgramUniform1f(fs, 3, mix_area_width);
+
+  glProgramUniform1f(fs, 4, edge0_rock_snow);
+  glProgramUniform1f(fs, 5, edge1_rock_snow);
+
+  glProgramUniform1i(fs, 6, display_type);
+
+  glProgramUniform3f(fs, 7, light_position[0], light_position[1], light_position[2]);
+
+  glProgramUniform1f(fs, 10, snow_uv);
+  glProgramUniform1f(fs, 11, ground_uv);
+  glProgramUniform1f(fs, 12, grass_uv);
+  glProgramUniform1f(fs, 13, rock_uv);
+
+  glProgramUniform1f(fs, 14, edge0_rock_ground);
+  glProgramUniform1f(fs, 15, edge1_rock_ground);
+
+  glProgramUniform1f(fs, 16, edge0_rock_grass);
+  glProgramUniform1f(fs, 17, edge1_rock_grass);
+
   glProgramUniform1f(tes, 0, height_factor);
+
   glProgramUniform1i(vs, 3, grid_size);
   glProgramUniform1f(vs, 4, patch_scale);
   glProgramUniform1f(vs, 5, patch_size);

@@ -11,10 +11,11 @@ void NoiseTerrainMaterial::prepare(const int width, const int height) {
 
   // Texture
   glCreateTextures(GL_TEXTURE_2D, 1, &texture);
-  glTextureStorage2D(texture, 1, GL_RGB8, width, height);
-  glTextureSubImage2D(texture, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, 0);
-  //   glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  //   glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTextureStorage2D(texture, 1, GL_RGBA16, 1024, 1024);
+  glTextureSubImage2D(texture, 0, 0, 0, 1024, 1024, GL_RGBA, GL_FLOAT, 0);
+  glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glGenerateTextureMipmap(texture);
   glNamedFramebufferTexture(fbo, GL_COLOR_ATTACHMENT0, texture, 0);
 }
 
@@ -43,7 +44,7 @@ void NoiseTerrainMaterial::add_slider_int(const char* label, int* v, int v_min, 
 }
 
 void NoiseTerrainMaterial::render_ui() {
-  add_combo("Noise function", &noise_function, "Simplex\0Billow\0Ridged\0Heightmap\0\0");
+  add_combo("Noise function", &noise_function, "Debug\0Simplex\0Billow\0Ridged\0Heightmap\0\0");
   add_checkbox("Use demo value", &use_demo_value);
 
   float step = 0.1f;
@@ -88,6 +89,7 @@ void NoiseTerrainMaterial::render_ui() {
       ImGui::PopItemWidth();
       ImGui::EndTabItem();
     }
+    add_slider_int("Normal", &normal_type, 0, 2);
   }
   ImGui::EndTabBar();
 
@@ -111,4 +113,6 @@ void NoiseTerrainMaterial::set_uniforms() const {
 
   glProgramUniform1ui(fs, 11, use_demo_value);
   glProgramUniform1i(fs, 12, noise_function);
+
+  glProgramUniform1i(fs, 13, normal_type);
 }
