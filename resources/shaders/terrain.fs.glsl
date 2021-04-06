@@ -1,33 +1,29 @@
 #version 460
 
+struct TerrainSubMaterial {
+  float height;
+  float primary_uv;
+  float secondary_uv;
+  float edge0;
+  float edge1;
+};
+
 layout(location = 0) uniform bool wireframe;
-layout(location = 1) uniform float snow_height;
-layout(location = 2) uniform float ground_height;
-layout(location = 3) uniform float mix_area_width;
+layout(location = 1) uniform float mix_area_width;
+layout(location = 2) uniform int display_type;
 
-layout(location = 4) uniform float edge0_rock_snow;
-layout(location = 5) uniform float edge1_rock_snow;
+layout(location = 3) uniform vec3 light_position;
 
-layout(location = 6) uniform int display_type;
-
-layout(location = 7) uniform vec3 light_position;
-
-layout(location = 10) uniform float snow_uv;
-layout(location = 11) uniform float ground_uv;
-layout(location = 12) uniform float grass_uv;
-layout(location = 13) uniform float rock_uv;
-
-layout(location = 14) uniform float edge0_rock_ground;
-layout(location = 15) uniform float edge1_rock_ground;
-
-layout(location = 16) uniform float edge0_rock_grass;
-layout(location = 17) uniform float edge1_rock_grass;
+layout(location = 6) uniform TerrainSubMaterial snow_material;
+layout(location = 11) uniform TerrainSubMaterial ground_material;
+layout(location = 16) uniform TerrainSubMaterial grass_material;
 
 layout(binding = 0) uniform sampler2D heightmap;
 layout(binding = 1) uniform sampler2D grass_texture;
 layout(binding = 2) uniform sampler2D ground_texture;
 layout(binding = 3) uniform sampler2D rock_texture;
 layout(binding = 4) uniform sampler2D snow_texture;
+layout(binding = 5) uniform sampler2D sand_texture;
 
 in GS_OUT {
   vec2 uv;
@@ -87,29 +83,33 @@ vec3 get_normal_texture_color() {
 vec3 get_base_color() {
   float height = get_height_color().r;
 
-  vec3 grass = texture(grass_texture, fs_in.uv * grass_uv).rgb;
-  vec3 ground = texture(ground_texture, fs_in.uv * ground_uv).rgb;
-  vec3 rock = texture(rock_texture, fs_in.uv * rock_uv).rgb;
-  vec3 snow = texture(snow_texture, fs_in.uv * snow_uv).rgb;
+  vec3 grass = texture(grass_texture, fs_in.uv * grass_material.primary_uv).rgb;
+  vec3 ground = texture(ground_texture, fs_in.uv * ground_material.primary_uv).rgb;
+  vec3 rock = texture(rock_texture, fs_in.uv * snow_material.secondary_uv).rgb;
+  vec3 snow = texture(snow_texture, fs_in.uv * snow_material.primary_uv).rgb;
+  vec3 sand = texture(sand_texture, fs_in.uv * grass_material.secondary_uv).rgb;
 
   vec3 vertical = vec3(0, 0, 1);
   vec3 normal = get_normal_texture_color();
   float angle = abs(dot(normalize(normal), vertical));
   // dot: 0->perp, 1->para
 
-  float coef = 1.0 - smoothstep(edge0_rock_snow, edge1_rock_snow, angle);
+  float coef = 1.0 - smoothstep(snow_material.edge0, snow_material.edge1, angle);
   snow = mix(snow, rock, coef);
 
-  coef = 1.0 - smoothstep(edge0_rock_ground, edge1_rock_ground, angle);
+  //coef = 1.0 - smoothstep(edge0_rock_ground, edge1_rock_ground, angle);
   //ground = mix(ground, rock, coef);
 
-  vec3 snow_ground = mix(ground, snow, get_mix_weight(height, snow_height));
-  vec3 ground_grass = mix(grass, ground, get_mix_weight(height, ground_height));
+  coef = 1.0 - smoothstep(grass_material.edge0, grass_material.edge1, angle);
+  grass = mix(sand, grass, coef);
 
-  if (height > snow_height + half_mix_area_width) return snow;
-  else if (height > snow_height - half_mix_area_width) return snow_ground;
-  else if (height > ground_height + half_mix_area_width) return ground;
-  else if (height > ground_height - half_mix_area_width) return ground_grass;
+  vec3 snow_ground = mix(ground, snow, get_mix_weight(height, snow_material.height));
+  vec3 ground_grass = mix(grass, ground, get_mix_weight(height, ground_material.height));
+
+  if (height > snow_material.height + half_mix_area_width) return snow;
+  else if (height > snow_material.height - half_mix_area_width) return snow_ground;
+  else if (height > ground_material.height + half_mix_area_width) return ground;
+  else if (height > ground_material.height - half_mix_area_width) return ground_grass;
   else return grass;
 }
 

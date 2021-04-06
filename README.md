@@ -67,3 +67,8 @@ sh build.sh
 ```bash
 sh run
 ````
+
+## Resources
+
+### Textures
+* Textures of Stunt Rally 2.3 from [opengameart.org](https://opengameart.org/content/terrain-textures-pack-from-stunt-rally-23)

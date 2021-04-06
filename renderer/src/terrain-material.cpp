@@ -10,10 +10,12 @@ using namespace odo::material;
 
 TerrainMaterial::TerrainMaterial() noexcept
     : Material{"terrain.vs.glsl", "terrain.tcs.glsl", "terrain.tes.glsl", "terrain.gs.glsl", "terrain.fs.glsl"} {
-  grass_texture = create_texture("grass_grass_0124_01_tiled_s.jpg", GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
-  ground_texture = create_texture("soil_ground_0045_02_tiled_s.jpg", GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
-  rock_texture = create_texture("rock_stones_0027_02_tiled_s.jpg", GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
-  snow_texture = create_texture("ground_stone_ground_0031_01_tiled.jpg", GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
+  grass_material.primary_texture = create_texture("grass_green2y_d.jpg", GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
+  ground_material.primary_texture = create_texture("ground_mud2_d.jpg", GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
+  snow_material.primary_texture = create_texture("snow1_d.jpg", GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
+
+  snow_material.secondary_texture = create_texture("mntn_forest_d.jpg", GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
+  grass_material.secondary_texture = create_texture("desert_sand_d.jpg", GL_REPEAT, GL_REPEAT, GL_NEAREST, GL_NEAREST);
 }
 
 void TerrainMaterial::render_ui() {
@@ -29,25 +31,30 @@ void TerrainMaterial::render_ui() {
     ImGui::TableHeadersRow();
 
     ImGui::TableNextColumn();
-    ImGui::SliderFloat("Height##snow", &snow_height, 0.0f, 1.0f);
-    ImGui::SliderFloat("UV##snow", &snow_uv, 0.0f, 200.0f);
+    ImGui::SliderFloat("Height##snow", &snow_material.height, 0.0f, 1.0f);
+    ImGui::SliderFloat("UV##snow", &snow_material.primary_uv, 0.0f, 50.0f);
 
     ImGui::Text("Rock");
-    ImGui::SliderFloat("Edge 0##snow", &edge0_rock_snow, 0.0f, 1.0f);
-    ImGui::SliderFloat("Edge 1##snow", &edge1_rock_snow, 0.0f, 1.0f);
-    ImGui::SliderFloat("UV##snow", &rock_uv, 0.0f, 200.0f);
+    ImGui::SliderFloat("Edge 0##snow", &snow_material.edge0, 0.0f, 1.0f);
+    ImGui::SliderFloat("Edge 1##snow", &snow_material.edge1, 0.0f, 1.0f);
+    ImGui::SliderFloat("UV##snow_rock", &snow_material.secondary_uv, 0.0f, 200.0f);
 
     ImGui::TableNextColumn();
-    ImGui::SliderFloat("Height##ground", &ground_height, 0.0f, 1.0f);
-    ImGui::SliderFloat("UV##ground", &ground_uv, 0.0f, 200.0f);
+    ImGui::SliderFloat("Height##ground", &ground_material.height, 0.0f, 1.0f);
+    ImGui::SliderFloat("UV##ground", &ground_material.primary_uv, 0.0f, 50.0f);
 
-    ImGui::Text("Rock");
+    /*ImGui::Text("Rock");
     ImGui::SliderFloat("Edge 0##ground", &edge0_rock_ground, 0.0f, 1.0f);
     ImGui::SliderFloat("Edge 1##ground", &edge1_rock_ground, 0.0f, 1.0f);
-    ImGui::SliderFloat("UV##ground", &rock_uv, 0.0f, 200.0f);
+    ImGui::SliderFloat("UV##ground", &rock_uv, 0.0f, 200.0f);*/
 
     ImGui::TableNextColumn();
-    ImGui::SliderFloat("UV##grass", &grass_uv, 0.0f, 200.0f);
+    ImGui::SliderFloat("UV##grass", &grass_material.primary_uv, 0.0f, 50.0f);
+
+    ImGui::Text("Rock");
+    ImGui::SliderFloat("Edge 0##grass", &grass_material.edge0, 0.0f, 1.0f);
+    ImGui::SliderFloat("Edge 1##grass", &grass_material.edge1, 0.0f, 1.0f);
+    ImGui::SliderFloat("UV##grass_rock", &grass_material.secondary_uv, 0.0f, 50.0f);
 
     ImGui::EndTable();
   }
@@ -65,27 +72,28 @@ void TerrainMaterial::render_ui() {
 
 void TerrainMaterial::set_uniforms() const {
   glProgramUniform1ui(fs, 0, use_wireframe);
-  glProgramUniform1f(fs, 1, snow_height);
-  glProgramUniform1f(fs, 2, ground_height);
-  glProgramUniform1f(fs, 3, mix_area_width);
+  glProgramUniform1f(fs, 1, mix_area_width);
+  glProgramUniform1i(fs, 2, display_type);
 
-  glProgramUniform1f(fs, 4, edge0_rock_snow);
-  glProgramUniform1f(fs, 5, edge1_rock_snow);
+  glProgramUniform3f(fs, 3, light_position[0], light_position[1], light_position[2]);
 
-  glProgramUniform1i(fs, 6, display_type);
+  glProgramUniform1f(fs, 6, snow_material.height);
+  glProgramUniform1f(fs, 7, snow_material.primary_uv);
+  glProgramUniform1f(fs, 8, snow_material.secondary_uv);
+  glProgramUniform1f(fs, 9, snow_material.edge0);
+  glProgramUniform1f(fs, 10, snow_material.edge1);
 
-  glProgramUniform3f(fs, 7, light_position[0], light_position[1], light_position[2]);
+  glProgramUniform1f(fs, 11, ground_material.height);
+  glProgramUniform1f(fs, 12, ground_material.primary_uv);
+  // glProgramUniform1f(fs, 13, ground_material.secondary_uv);
+  // glProgramUniform1f(fs, 14, ground_material.edge0);
+  // glProgramUniform1f(fs, 15, ground_material.edge1);
 
-  glProgramUniform1f(fs, 10, snow_uv);
-  glProgramUniform1f(fs, 11, ground_uv);
-  glProgramUniform1f(fs, 12, grass_uv);
-  glProgramUniform1f(fs, 13, rock_uv);
-
-  glProgramUniform1f(fs, 14, edge0_rock_ground);
-  glProgramUniform1f(fs, 15, edge1_rock_ground);
-
-  glProgramUniform1f(fs, 16, edge0_rock_grass);
-  glProgramUniform1f(fs, 17, edge1_rock_grass);
+  // glProgramUniform1f(fs, 16, grass_material.height);
+  glProgramUniform1f(fs, 17, grass_material.primary_uv);
+  glProgramUniform1f(fs, 18, grass_material.secondary_uv);
+  glProgramUniform1f(fs, 19, grass_material.edge0);
+  glProgramUniform1f(fs, 20, grass_material.edge1);
 
   glProgramUniform1f(tes, 0, height_factor);
 
@@ -97,10 +105,11 @@ void TerrainMaterial::set_uniforms() const {
 void TerrainMaterial::set_uniforms_from_parent(const Material& parent_material) const {
   const NoiseTerrainMaterial& noise_terrain_material = dynamic_cast<const NoiseTerrainMaterial&>(parent_material);
   glBindTextureUnit(0, noise_terrain_material.get_offscreen_texture());
-  glBindTextureUnit(1, grass_texture);
-  glBindTextureUnit(2, ground_texture);
-  glBindTextureUnit(3, rock_texture);
-  glBindTextureUnit(4, snow_texture);
+  glBindTextureUnit(1, grass_material.primary_texture);
+  glBindTextureUnit(2, ground_material.primary_texture);
+  glBindTextureUnit(3, snow_material.secondary_texture);
+  glBindTextureUnit(4, snow_material.primary_texture);
+  glBindTextureUnit(5, grass_material.secondary_texture);
 }
 
 void TerrainMaterial::set_camera_matrices(scene::Camera camera) const {
