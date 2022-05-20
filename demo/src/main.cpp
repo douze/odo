@@ -21,7 +21,7 @@ int main() {
 
   // Configuration
   spdlog::set_level(spdlog::level::debug);
-  Configuration configuration{1280, 800};
+  Configuration configuration{1680, 1050};
 
   // Create renderer
   Renderer renderer{configuration.width, configuration.height};

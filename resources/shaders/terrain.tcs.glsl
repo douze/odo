@@ -57,9 +57,5 @@ void main(void) {
   gl_TessLevelInner[1] = (gl_TessLevelOuter[1] + gl_TessLevelOuter[2]) * 0.5;
 
   tcs_out[gl_InvocationID].uv = tcs_in[gl_InvocationID].uv;
-
-  // fixed tesselation level for debug
-  for (int i = 0 ; i < 4 ; i++) gl_TessLevelOuter[i] = 64.0;
-  for (int i = 0 ; i < 2 ; i++) gl_TessLevelInner[i] = 64.0;
 }
 

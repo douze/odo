@@ -22,7 +22,7 @@ void Gui::render_ui(scene::Scene& scene) {
   ImGui::NewFrame();
 
   // I need examples for now
-  ImGui::ShowDemoWindow();
+  // ImGui::ShowDemoWindow();
 
   // Real UI
   ImGui::Begin("OpenGL Demo");
