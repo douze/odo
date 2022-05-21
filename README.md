@@ -1,4 +1,9 @@
 # odo
+
+![Linux](https://img.shields.io/badge/-Linux-grey?logo=linux)
+![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)
+![continuous integration](https://github.com/douze/odo/actions/workflows/continuous-integration.yml/badge.svg)
+
 **O**penGL **d**em**o** project is used to discover modern:
 * Toolchain
 * C++
@@ -8,7 +13,7 @@
 
 ## Terrain rendering features
 * Instances of patches, with position & offset from vertex shader
-* Camera based LOD, using GPU tesselation
+* Camera based LOD, using GPU tessellation
 * Procedural height from GPU combined noise functions
 
 ## Librairies
@@ -21,7 +26,7 @@
 ## Installation
 
 **Prerequisites:** 
-* dependencies: pkg-config xorg-dev libx11-xcb-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev
+* dependencies: pkg-config xorg-dev libx11-xcb-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-util-dev
 * build system generator: [cmake](https://cmake.org/)
 * build system: [ninja](https://ninja-build.org/)
 * compiler: [clang++](https://clang.llvm.org/)
