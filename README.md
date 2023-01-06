@@ -1,8 +1,8 @@
 # odo
 
-![Linux](https://img.shields.io/badge/-Linux-grey?logo=linux)
-![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)
-![continuous integration](https://github.com/douze/odo/actions/workflows/continuous-integration.yml/badge.svg)
+![Linux](https://img.shields.io/badge/-Linux-grey?logo=linux&logoColor=white)
+![license](https://img.shields.io/github/license/douze/odo?color=blue&label=license)
+![continuous integration](https://img.shields.io/github/actions/workflow/status/douze/odo/continuous-integration.yml)
 
 **O**penGL **d**em**o** project is used to discover modern:
 * Toolchain
