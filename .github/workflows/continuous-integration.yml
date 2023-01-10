@@ -17,6 +17,7 @@ jobs:
           pip install conan
       - name: Install dependencies
         run: |
+          sudo apt update
           sudo apt install pkg-config xorg-dev libx11-xcb-dev libxcb-render0-dev libxcb-render-util0-dev libxcb-xkb-dev libxcb-icccm4-dev libxcb-image0-dev libxcb-keysyms1-dev libxcb-randr0-dev libxcb-shape0-dev libxcb-sync-dev libxcb-xfixes0-dev libxcb-xinerama0-dev libxcb-dri3-dev libxcb-util-dev
           sh scripts/setup.sh
       - name: Configure cmake
