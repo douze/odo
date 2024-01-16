@@ -3,6 +3,7 @@
 ![Linux](https://img.shields.io/badge/-Linux-grey?logo=linux&logoColor=white)
 ![license](https://img.shields.io/github/license/douze/odo?color=blue&label=license)
 ![continuous integration](https://img.shields.io/github/actions/workflow/status/douze/odo/continuous-integration.yml)
+![status](https://img.shields.io/badge/status-inative-yellowgreen)
 
 **O**penGL **d**em**o** project is used to discover modern:
 * Toolchain
