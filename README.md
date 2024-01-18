@@ -10,7 +10,7 @@
 * C++
 * OpenGL
 
-![Preview](images/odo.png)
+![Preview](odo.png)
 
 ## Terrain rendering features
 * Instances of patches, with position & offset from vertex shader
